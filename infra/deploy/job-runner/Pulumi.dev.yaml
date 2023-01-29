@@ -1,0 +1,7 @@
+config:
+  aws:region: us-east-1
+  lambda-cronjobs.deploy-job-runner:jobCheckMexicanEmbassyVisaAppointmentAvailability:
+    email:
+      secure: AAABAOHq1N2ikUFHwt85+gStrCjNbJgELMQGbBtprDN/Q4TIJ559C2xuHrnWwGyUOFuYvwwt
+    password:
+      secure: AAABANRlHIh8oTiE8vJjStafcVCfpaXSec3+5MFipcQY4F3wZG2xASWDBWk=

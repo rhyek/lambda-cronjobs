@@ -1,0 +1,74 @@
+name: CICD
+
+on:
+  push:
+    branches:
+      - main
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+env:
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  infra-resources:
+    name: Infrastructure resources
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 7.11.0
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          pnpm \
+            --filter {infra/resources} \
+            install --frozen-lockfile
+      - uses: pulumi/actions@v3
+        with:
+          work-dir: infra/resources
+          stack-name: dev
+          command: up
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  deploy:
+    name: Deploy
+    needs: infra-resources
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        appName: [job-runner]
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 7.11.0
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          pnpm \
+            --filter {infra/deploy/${{ matrix.appName }}} \
+            install --frozen-lockfile
+      - uses: docker/setup-buildx-action@v2
+      - name: Expose GitHub Runtime Environment Variables
+        uses: crazy-max/ghaction-github-runtime@v1
+      - run: pnpm ts-node ./scripts/deploy-app.ts ${{ matrix.appName }}
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
