@@ -16,6 +16,7 @@ ARG FUNCTION_DIR="/function"
 RUN mkdir -p ${FUNCTION_DIR}
 WORKDIR ${FUNCTION_DIR}
 WORKDIR ${FUNCTION_DIR}/apps/job-runner
+
 RUN npm i aws-lambda-ric
 
 RUN npm config --global set prefix /tmp/.npm
@@ -33,6 +34,5 @@ COPY apps/job-runner/tsconfig.json ./
 COPY apps/job-runner/src src
 RUN pnpm build
 
-# ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
 ENTRYPOINT ["/usr/bin/npx", "aws-lambda-ric"]
 CMD ["./dist/apps/job-runner/src/main.handler"]
