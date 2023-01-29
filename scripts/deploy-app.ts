@@ -45,6 +45,8 @@ const {
           ]
         : []),
       '--push',
+      '--provenance',
+      'false',
       '.',
     ],
     {
