@@ -1,15 +1,28 @@
-FROM node:14-buster
+FROM node:14-alpine3.12
 ARG FUNCTION_DIR="/function"
-RUN apt-get update && \
-  apt-get install -y \
-  g++ \
-  make \
-  autoconf \
-  cmake \
-  unzip \
+RUN apk add --update-cache \
+  build-base \
   libtool \
-  libcurl4-openssl-dev \
-  python3
+  libressl-dev \
+  musl-dev \
+  libffi-dev \
+  autoconf \
+  automake \
+  libexecinfo-dev \
+  make \
+  cmake \
+  python3 \
+  py3-pip \
+  libcurl
+# Installs latest Chromium package.
+RUN apk add --no-cache \
+  chromium \
+  nss \
+  freetype \
+  freetype-dev \
+  harfbuzz \
+  ca-certificates \
+  ttf-freefont    
 RUN npm i -g pnpm
 RUN mkdir -p ${FUNCTION_DIR}
 WORKDIR ${FUNCTION_DIR}
