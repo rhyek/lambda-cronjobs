@@ -9,12 +9,9 @@ export class GoogleTitleJob extends PlaywrightJob {
     page: Page;
   }): Promise<void> {
     await page.goto('https://google.com');
-    await page.getByRole('combobox', { name: 'Buscar' }).click();
-    await page.getByRole('combobox', { name: 'Buscar' }).fill('steve carell');
-    await page
-      .getByRole('button', { name: 'Buscar con Google' })
-      .first()
-      .click();
+    await page.getByRole('combobox', { name: 'Search' }).click();
+    await page.getByRole('combobox', { name: 'Search' }).fill('steve carell');
+    await page.getByRole('button', { name: 'Google Search' }).first().click();
     const title = await page.title();
     console.log('title:', title);
     // await page.pause();
