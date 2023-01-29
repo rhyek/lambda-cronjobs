@@ -1,28 +1,15 @@
-FROM node:14-alpine3.12
+FROM mcr.microsoft.com/playwright:v1.22.2-focal
 ARG FUNCTION_DIR="/function"
-RUN apk add --update-cache \
-  build-base \
-  libtool \
-  libressl-dev \
-  musl-dev \
-  libffi-dev \
-  autoconf \
-  automake \
-  libexecinfo-dev \
+RUN apt-get update && \
+  apt-get install -y \
+  g++ \
   make \
+  autoconf \
   cmake \
-  python3 \
-  py3-pip \
-  libcurl
-# Installs latest Chromium package.
-RUN apk add --no-cache \
-  chromium \
-  nss \
-  freetype \
-  freetype-dev \
-  harfbuzz \
-  ca-certificates \
-  ttf-freefont    
+  unzip \
+  libtool \
+  libcurl4-openssl-dev \
+  python3
 RUN npm i -g pnpm
 RUN mkdir -p ${FUNCTION_DIR}
 WORKDIR ${FUNCTION_DIR}
