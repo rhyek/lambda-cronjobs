@@ -13,8 +13,8 @@ RUN apt-get update && \
 RUN npm i -g pnpm
 RUN mkdir -p ${FUNCTION_DIR}
 WORKDIR ${FUNCTION_DIR}
-RUN npm i aws-lambda-ric
 WORKDIR ${FUNCTION_DIR}/apps/job-runner
+RUN npm i aws-lambda-ric
 COPY \
   apps/job-runner/package.json \
   apps/job-runner/pnpm-lock.yaml \
