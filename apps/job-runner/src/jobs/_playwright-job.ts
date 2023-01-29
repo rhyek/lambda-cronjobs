@@ -1,4 +1,5 @@
-import { Browser, chromium, Page } from 'playwright';
+import { Browser, Page } from 'playwright';
+import { launchChromium } from 'playwright-aws-lambda';
 import { Job } from './_job';
 
 export abstract class PlaywrightJob extends Job {
@@ -6,7 +7,7 @@ export abstract class PlaywrightJob extends Job {
     let browser: Browser | null = null;
     let page: Page | null = null;
     try {
-      browser = await chromium.launch({
+      browser = await launchChromium({
         // headless: false,
       });
       page = await browser.newPage({
