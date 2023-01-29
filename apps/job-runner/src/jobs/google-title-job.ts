@@ -1,4 +1,4 @@
-import { Browser, Page } from 'playwright';
+import { Browser, Page } from 'playwright-core';
 import { PlaywrightJob } from './_playwright-job';
 
 export class GoogleTitleJob extends PlaywrightJob {

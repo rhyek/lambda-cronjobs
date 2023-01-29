@@ -1,4 +1,4 @@
-import { Browser, Page } from 'playwright';
+import { Browser, Page } from 'playwright-core';
 import { launchChromium } from 'playwright-aws-lambda';
 import { Job } from './_job';
 

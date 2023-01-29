@@ -1,4 +1,4 @@
-import { Browser, chromium, Page } from 'playwright';
+import { Browser, chromium, Page } from 'playwright-core';
 import { isEqual } from 'lodash';
 
 export async function checkMexicanEmbassyVisaAppointments() {

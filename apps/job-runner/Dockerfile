@@ -10,7 +10,7 @@ RUN apt-get update && \
   libtool \
   libcurl4-openssl-dev \
   python3
-RUN npm i -g pnpm
+RUN npm i -g npx pnpm
 RUN mkdir -p ${FUNCTION_DIR}
 WORKDIR ${FUNCTION_DIR}
 RUN npm i aws-lambda-ric
