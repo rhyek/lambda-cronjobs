@@ -19,6 +19,11 @@ WORKDIR ${FUNCTION_DIR}/apps/job-runner
 
 RUN npm i aws-lambda-ric
 
+# at runtime something related to npm
+# is trying to write to or below one of its default
+# folders which are read-only locations
+# per aws lambda fs permissions configuration.
+# /tmp is allowed
 RUN npm config --global set prefix /tmp/.npm
 RUN npm config --global set cache /tmp/.npm-cache
 ENV PATH="$PATH:/tmp/.npm/bin"
