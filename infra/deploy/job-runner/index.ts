@@ -12,8 +12,12 @@ const queue = new aws.sqs.Queue(resourceName, {
 });
 
 const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
+  // {
+  //   jobName: JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY,
+  //   scheduleExpression: 'cron(* * * * ? *)' /* every minute */,
+  // },
   {
-    jobName: JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY,
+    jobName: JobName.GOOGLE_TITLE,
     scheduleExpression: 'cron(* * * * ? *)' /* every minute */,
   },
 ];
@@ -101,8 +105,3 @@ const lambda = new aws.lambda.Function(resourceName, {
 queue.onEvent(resourceName, lambda, {
   batchSize: 1,
 });
-
-// new aws.lambda.EventSourceMapping(resourceName, {
-//   eventSourceArn: queue.arn,
-//   functionName: lambda.arn,
-// });

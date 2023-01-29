@@ -6,6 +6,7 @@ specifiers:
   '@types/node': ~18.11.18
   dayjs: ~1.11.7
   lodash: ~4.17.21
+  minimist: ~1.2.7
   playwright: ~1.30.0
   ts-node: ~10.9.1
   ts-node-dev: ~2.0.0
@@ -20,6 +21,7 @@ devDependencies:
   '@types/aws-lambda': 8.10.110
   '@types/lodash': 4.14.191
   '@types/node': 18.11.18
+  minimist: 1.2.7
   ts-node: 10.9.1_awa2wsr5thmg3i7jqycphctjfq
   ts-node-dev: 2.0.0_awa2wsr5thmg3i7jqycphctjfq
   typescript: 4.9.4
