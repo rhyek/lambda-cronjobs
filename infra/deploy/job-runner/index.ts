@@ -18,7 +18,7 @@ const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
   // },
   {
     jobName: JobName.GOOGLE_TITLE,
-    scheduleExpression: 'cron(* * * * ? *)' /* every minute */,
+    scheduleExpression: 'cron(0/10 0 ? * * *)' /* every minute */,
   },
 ];
 
