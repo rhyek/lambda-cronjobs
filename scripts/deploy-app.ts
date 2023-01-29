@@ -6,10 +6,6 @@ const {
 } = parseArgs(process.argv.slice(2));
 
 (async () => {
-  await command(`pnpm build`, {
-    cwd: `../apps/${appName}`,
-    stdio: 'inherit',
-  });
   const tag = new Date().getTime().toString();
   await command(
     `aws ecr get-login-password | docker login -u AWS --password-stdin "https://$(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.${process.env.AWS_DEFAULT_REGION}.amazonaws.com"`,
