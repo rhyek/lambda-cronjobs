@@ -22,6 +22,7 @@ const {
     }
   );
   const imageUri = `${repoUrl}:${tag}`;
+  console.log('image uri', imageUri);
   await execa(
     'docker',
     [
