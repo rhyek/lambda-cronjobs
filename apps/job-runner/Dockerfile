@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.22.2-focal
+FROM mcr.microsoft.com/playwright:v1.30.0-focal
 ARG FUNCTION_DIR="/function"
 RUN apt-get update && \
   apt-get install -y \
