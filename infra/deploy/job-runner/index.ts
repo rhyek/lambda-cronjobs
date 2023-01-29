@@ -19,7 +19,10 @@ const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
 
 for (const { jobName, scheduleExpression } of jobSchedules) {
   aws.cloudwatch.onSchedule(
-    `${resourceName}-run-${jobName}`.substring(0, 64),
+    `${resourceName}-run-${jobName}`.substring(
+      0,
+      64 - 7 /* maximum 64 - 7 random chars */
+    ),
     scheduleExpression, // every minute
     async () => {
       const client = new aws.sdk.SQS();
