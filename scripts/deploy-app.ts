@@ -5,6 +5,8 @@ const {
   _: [appName],
 } = parseArgs(process.argv.slice(2));
 
+process.chdir(__dirname);
+
 (async () => {
   const tag = new Date().getTime().toString();
   await command(
@@ -34,8 +36,7 @@ const {
       'build',
       '--platform',
       platform,
-      '--provenance',
-      'false', // https://stackoverflow.com/a/75149347/410224
+      '--provenance=false', // https://stackoverflow.com/a/75149347/410224
       '-t',
       imageUri,
       '-f',
