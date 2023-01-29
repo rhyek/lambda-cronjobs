@@ -99,7 +99,7 @@ jobs:
 
       - uses: docker/setup-buildx-action@v2
       - name: Expose GitHub Runtime Environment Variables
-        uses: crazy-max/ghaction-github-runtime@v1
+        uses: crazy-max/ghaction-github-runtime@v2
       - run: pnpm ts-node ./deploy-app.ts ${{ matrix.appName }}
         working-directory: ./scripts
         env:
