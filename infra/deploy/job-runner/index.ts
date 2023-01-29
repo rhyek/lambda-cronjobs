@@ -1,5 +1,6 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
+import { JobRunnerMessagePayload } from '../../../shared/sqs-message-payloads';
 import { JobName } from '../../../shared/job-names';
 
 const config = new pulumi.Config();
@@ -21,7 +22,7 @@ for (const { jobName, scheduleExpression } of jobSchedules) {
   aws.cloudwatch.onSchedule(
     `${resourceName}-run-${jobName}`.substring(
       0,
-      64 - 7 /* maximum 64 - 7 random chars */
+      64 - 1 - 7 /* maximum 64 - 1 dash - 7 random chars */
     ),
     scheduleExpression, // every minute
     async () => {
@@ -31,7 +32,7 @@ for (const { jobName, scheduleExpression } of jobSchedules) {
           QueueUrl: queue.url.get(),
           MessageBody: JSON.stringify({
             job: jobName,
-          }),
+          } as JobRunnerMessagePayload),
         })
         .promise();
       console.log(req);
