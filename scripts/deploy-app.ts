@@ -21,21 +21,25 @@ const {
       shell: true,
     }
   );
+
   const imageUri = `${repoUrl}:${tag}`;
-  console.log('image uri', imageUri);
+  const platform = process.env.CI ? 'linux/amd64' : 'linux/arm64';
+  const arch = process.env.CI ? 'x86_64' : 'arm64';
+  console.log('params', JSON.stringify({ imageUri, platform, arch }, null, 2));
+
   await execa(
     'docker',
     [
       'buildx',
       'build',
       '--platform',
-      process.env.CI ? 'linux/amd64' : 'linux/arm64',
+      platform,
+      '--provenance',
+      'false',
       '-t',
       imageUri,
       '-f',
       `apps/${appName}/Dockerfile`,
-      '--build-arg',
-      `APP_NAME=${appName}`,
       ...(process.env.CI
         ? [
             '--cache-from',
@@ -45,8 +49,6 @@ const {
           ]
         : []),
       '--push',
-      '--provenance',
-      'false',
       '.',
     ],
     {
@@ -59,7 +61,7 @@ const {
     stdio: 'inherit',
     env: {
       IMAGE_URI: imageUri,
-      ARCH: process.env.CI ? 'x86_64' : 'arm64',
+      ARCH: arch,
     },
   });
 })();
