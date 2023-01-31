@@ -2,7 +2,7 @@ import { Browser, Page } from 'playwright-core';
 import { PlaywrightJob } from './_playwright-job';
 
 export class GoogleTitleJob extends PlaywrightJob {
-  protected override async _run({
+  protected override async playwrightRun({
     page,
   }: {
     browser: Browser;

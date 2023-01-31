@@ -1,21 +1,9 @@
 #!/usr/bin/env ts-node
-import dayjs from 'dayjs';
-import { jobs } from './jobs';
+import { JobName } from '../../../shared/job-names';
+import { runJob } from './main';
 
 async function main() {
-  const job = jobs['google-title'];
-  if (!job) {
-    return;
-  }
-  const start = dayjs();
-  console.log(`Starting job`);
-  try {
-    await job.run();
-    console.log('Finished successfully');
-  } catch (error) {
-    console.error(error);
-  }
-  console.log(`Finished in ${dayjs().diff(start, 'seconds')}s`);
+  await runJob(JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY);
 }
 
 void main();

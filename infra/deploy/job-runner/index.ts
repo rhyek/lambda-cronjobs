@@ -7,14 +7,20 @@ const config = new pulumi.Config();
 
 const resourceName = 'job-runner';
 
+const resourcesStack = new pulumi.StackReference(
+  `rhyek/lambda-cronjobs/${pulumi.getStack()}`
+);
+
 const queue = new aws.sqs.Queue(resourceName, {
-  visibilityTimeoutSeconds: 300,
+  visibilityTimeoutSeconds: 5 * 60,
 });
 
 const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
   // {
   //   jobName: JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY,
-  //   scheduleExpression: 'cron(* * * * ? *)' /* every minute */,
+  //   // scheduleExpression: 'cron(* * * * ? *)' /* every minute */,
+  //   scheduleExpression:
+  //     'cron(0 0,2,12,14,16,18,20,22 ? * * *)' /* every 2 hours */,
   // },
   {
     jobName: JobName.GOOGLE_TITLE,
@@ -46,31 +52,37 @@ for (const { jobName, scheduleExpression } of jobSchedules) {
 }
 
 const lambdaRole = new aws.iam.Role(resourceName, {
-  assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
-    Service: 'lambda.amazonaws.com',
-  }),
+  assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal(
+    aws.iam.Principals.LambdaPrincipal
+  ),
+});
+
+const lambdaPolicyDoc = aws.iam.getPolicyDocumentOutput({
+  statements: [
+    {
+      effect: 'Allow',
+      actions: [
+        'logs:CreateLogGroup',
+        'logs:CreateLogStream',
+        'logs:PutLogEvents',
+
+        'sqs:SendMessage',
+        'sqs:ReceiveMessage',
+        'sqs:DeleteMessage',
+        'sqs:GetQueueAttributes',
+      ],
+      resources: ['*'],
+    },
+    {
+      effect: 'Allow',
+      actions: ['secretsmanager:GetSecretValue'],
+      resources: [resourcesStack.getOutput('mailerSecretArn')],
+    },
+  ],
 });
 
 const lambdaRolePolicy = new aws.iam.Policy(resourceName, {
-  policy: {
-    Version: '2012-10-17',
-    Statement: [
-      {
-        Effect: 'Allow',
-        Action: [
-          'logs:CreateLogGroup',
-          'logs:CreateLogStream',
-          'logs:PutLogEvents',
-
-          'sqs:SendMessage',
-          'sqs:ReceiveMessage',
-          'sqs:DeleteMessage',
-          'sqs:GetQueueAttributes',
-        ],
-        Resource: '*',
-      },
-    ],
-  },
+  policy: lambdaPolicyDoc.apply((doc) => doc.json),
 });
 
 new aws.iam.RolePolicyAttachment(resourceName, {

@@ -1,25 +1,17 @@
 import { Browser, chromium, Page } from 'playwright-core';
 import { isEqual } from 'lodash';
+import { PlaywrightJob } from './_playwright-job';
 
-export async function checkMexicanEmbassyVisaAppointments() {
-  let browser: Browser | null = null;
-  let page: Page | null = null;
-  try {
-    browser = await chromium.launch({
-      // headless: false,
-    });
-    page = await browser.newPage({
-      // viewport: {
-      //   width: 1680,
-      //   height: 1200,
-      // },
-      userAgent:
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
-    });
-
+export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJob {
+  protected override async playwrightRun({
+    page,
+  }: {
+    browser: Browser;
+    page: Page;
+  }): Promise<void> {
     const closeNotice = () => page!.locator('a svg').first().click();
 
-    await page.goto('https://cditas.sre.gob.mx/');
+    await page.goto('https://citas.sre.gob.mx/');
     await page.getByRole('button', { name: 'Oficinas Consulares' }).click();
     await page
       .locator('input[name=email]')
@@ -111,8 +103,5 @@ export async function checkMexicanEmbassyVisaAppointments() {
     ]);
 
     console.log('should notify', shouldNotify);
-  } finally {
-    await page?.close();
-    await browser?.close();
   }
 }

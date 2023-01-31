@@ -7,6 +7,7 @@ specifiers:
   dayjs: ~1.11.7
   lodash: ~4.17.21
   minimist: ~1.2.7
+  nodemailer: ~6.9.1
   playwright-aws-lambda: ~0.9.0
   playwright-core: ~1.30.0
   ts-node: ~10.9.1
@@ -16,6 +17,7 @@ specifiers:
 dependencies:
   dayjs: 1.11.7
   lodash: 4.17.21
+  nodemailer: 6.9.1
   playwright-aws-lambda: 0.9.0_playwright-core@1.30.0
   playwright-core: 1.30.0
 
@@ -297,6 +299,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dev: true
+
+  /nodemailer/6.9.1:
+    resolution: {integrity: sha512-qHw7dOiU5UKNnQpXktdgQ1d3OFgRAekuvbJLcdG5dnEo/GtcTHRYM7+UfJARdOFU9WUQO8OiIamgWPmiSFHYAA==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /normalize-path/3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}

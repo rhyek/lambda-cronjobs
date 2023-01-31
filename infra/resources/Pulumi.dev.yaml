@@ -1,2 +1,8 @@
 config:
   aws:region: us-east-1
+  lambda-cronjobs.resources:mailer:
+    smtp:
+      account:
+        secure: AAABAHraox4sMCVZi12aVg0cvuNC0YgaWAYLggAltiPfcCBje1V+VzjQIJjJslHcP6cd5w==
+      password:
+        secure: AAABAC7/e3GXGb03nHKzBPbbUL4uCljJfCncR7X9pROXYvyatVMw6/ldJDWxCJuw
