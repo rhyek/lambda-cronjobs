@@ -1,7 +1,11 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
 import { JobRunnerMessagePayload } from '../../../shared/sqs-message-payloads';
-import { JobName } from '../../../shared/job-names';
+import {
+  JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig,
+  JobName,
+  truncatePulumiResourceName,
+} from '../../../shared';
 import { Output } from '@pulumi/pulumi';
 
 const config = new pulumi.Config();
@@ -35,10 +39,7 @@ const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
 
 for (const { jobName, scheduleExpression } of jobSchedules) {
   aws.cloudwatch.onSchedule(
-    `${resourceName}-run-${jobName}`.substring(
-      0,
-      64 - 1 - 7 /* maximum 64 - 1 dash - 7 random chars */
-    ),
+    truncatePulumiResourceName(`${resourceName}-run-${jobName}`),
     scheduleExpression, // every minute
     async () => {
       const client = new aws.sdk.SQS();
@@ -91,13 +92,33 @@ new aws.iam.RolePolicyAttachment(`${resourceName}-custom`, {
   policyArn: lambdaRolePolicy.arn,
 });
 
-const imageUri = process.env.IMAGE_URI!;
-const arch = process.env.ARCH!;
-
 const jobCheckMexicanEmbassyVisaAppointmentAvailability =
   config.requireSecretObject<{ email: string; password: string }>(
     'jobCheckMexicanEmbassyVisaAppointmentAvailability'
   );
+const jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecret =
+  new aws.secretsmanager.Secret(
+    truncatePulumiResourceName(
+      'job-check-mexican-embassy-visa-appointment-availability-config'
+    )
+  );
+new aws.secretsmanager.SecretVersion(
+  truncatePulumiResourceName(
+    'job-check-mexican-embassy-visa-appointment-availability-config'
+  ),
+  {
+    secretId: jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecret.id,
+    secretString: jobCheckMexicanEmbassyVisaAppointmentAvailability.apply(
+      ({ email, password }) =>
+        JSON.stringify({
+          account: { email, password },
+        } as JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig)
+    ),
+  }
+);
+
+const imageUri = process.env.IMAGE_URI!;
+const arch = process.env.ARCH!;
 
 const lambda = new aws.lambda.Function(resourceName, {
   packageType: 'Image',
@@ -109,16 +130,21 @@ const lambda = new aws.lambda.Function(resourceName, {
   environment: {
     variables: {
       SECRET_ARNS: pulumi
-        .all([mailerConfigSecretArn])
-        .apply(([mailerConfigSecretArn]) =>
-          JSON.stringify({
-            mailerConfig: mailerConfigSecretArn,
-          })
+        .all([
+          mailerConfigSecretArn,
+          jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecret.arn,
+        ])
+        .apply(
+          ([
+            mailerConfigSecretArn,
+            jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
+          ]) =>
+            JSON.stringify({
+              mailerConfig: mailerConfigSecretArn,
+              jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig:
+                jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
+            })
         ),
-      JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_EMAIL:
-        jobCheckMexicanEmbassyVisaAppointmentAvailability.email,
-      JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_PASSWORD:
-        jobCheckMexicanEmbassyVisaAppointmentAvailability.password,
     },
   },
 });

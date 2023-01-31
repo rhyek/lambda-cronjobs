@@ -2,7 +2,10 @@ import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from '@aws-sdk/client-secrets-manager';
-import { MailerConfig } from '../../../shared';
+import {
+  JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig,
+  MailerConfig,
+} from '../../../shared';
 
 let secrets: object | null = null;
 async function getSecrets<T extends object>(): Promise<T> {
@@ -33,11 +36,17 @@ async function getSecrets<T extends object>(): Promise<T> {
 }
 
 export async function getJobRunnerSecrets<
-  T extends { mailerConfig: MailerConfig }
+  T extends {
+    mailerConfig: MailerConfig;
+    jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig: JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig;
+  }
 >(): Promise<T> {
   const secrets = await getSecrets<Record<keyof T, string>>();
   return {
     ...secrets,
-    mailerConfig: JSON.parse(secrets.mailerConfig),
+    mailerConfig: JSON.parse(secrets.mailerConfig) as MailerConfig,
+    jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig: JSON.parse(
+      secrets.jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig
+    ) as JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig,
   } as T;
 }

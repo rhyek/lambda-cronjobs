@@ -1,6 +1,8 @@
-import { Browser, chromium, Page } from 'playwright-core';
+import { Browser, Page } from 'playwright-core';
 import { isEqual } from 'lodash';
 import { PlaywrightJob } from './_playwright-job';
+import { getJobRunnerSecrets } from '../secrets';
+import { isLambda } from '../utils';
 
 export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJob {
   protected override async playwrightRun({
@@ -11,20 +13,27 @@ export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJo
   }): Promise<void> {
     const closeNotice = () => page!.locator('a svg').first().click();
 
+    let email: string;
+    let password: string;
+    if (isLambda()) {
+      ({
+        jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig: {
+          account: { email, password },
+        },
+      } = await getJobRunnerSecrets());
+    } else {
+      email =
+        process.env
+          .JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_EMAIL!;
+      password =
+        process.env
+          .JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_PASSWORD!;
+    }
+
     await page.goto('https://citas.sre.gob.mx/');
     await page.getByRole('button', { name: 'Oficinas Consulares' }).click();
-    await page
-      .locator('input[name=email]')
-      .fill(
-        process.env
-          .JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_EMAIL!
-      );
-    await page
-      .locator('input[name=password]')
-      .fill(
-        process.env
-          .JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_PASSWORD!
-      );
+    await page.locator('input[name=email]').fill(email);
+    await page.locator('input[name=password]').fill(password);
     await page
       .getByLabel('He leido y acepto los términos y condiciones')
       .click();

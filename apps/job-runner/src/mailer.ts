@@ -9,15 +9,15 @@ export async function getMailer(): Promise<Transporter> {
   if (!transport) {
     let account: string;
     let password: string;
-    if (!isLambda()) {
-      account = process.env.MAILER_SMTP_ACCOUNT!;
-      password = process.env.MAILER_SMTP_PASSWORD!;
-    } else {
+    if (isLambda()) {
       ({
         mailerConfig: {
           smtp: { account, password },
         },
       } = await getJobRunnerSecrets());
+    } else {
+      account = process.env.MAILER_SMTP_ACCOUNT!;
+      password = process.env.MAILER_SMTP_PASSWORD!;
     }
     transport = createTransport({
       service: 'gmail',
