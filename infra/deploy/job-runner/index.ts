@@ -10,6 +10,7 @@ const resourceName = 'job-runner';
 const resourcesStack = new pulumi.StackReference(
   `rhyek/lambda-cronjobs.resources/${pulumi.getStack()}`
 );
+const mailerSecretArn = resourcesStack.getOutput('mailerSecretArn');
 
 const queue = new aws.sqs.Queue(resourceName, {
   visibilityTimeoutSeconds: 5 * 60,
@@ -75,7 +76,7 @@ const lambdaPolicyDoc = aws.iam.getPolicyDocumentOutput({
     {
       effect: 'Allow',
       actions: ['secretsmanager:GetSecretValue'],
-      resources: [resourcesStack.getOutput('mailerSecretArn')],
+      resources: [mailerSecretArn],
     },
   ],
 });
@@ -108,6 +109,7 @@ const lambda = new aws.lambda.Function(resourceName, {
         jobCheckMexicanEmbassyVisaAppointmentAvailability.email,
       JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_PASSWORD:
         jobCheckMexicanEmbassyVisaAppointmentAvailability.password,
+      MAILER_SECRET_ARN: mailerSecretArn,
     },
   },
 });

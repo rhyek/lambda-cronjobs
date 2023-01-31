@@ -1,4 +1,6 @@
 import { Browser, Page } from 'playwright-core';
+import { getMailer } from '../mailer';
+import { isLambda } from '../utils';
 import { PlaywrightJob } from './_playwright-job';
 
 export class GoogleTitleJob extends PlaywrightJob {
@@ -9,11 +11,29 @@ export class GoogleTitleJob extends PlaywrightJob {
     page: Page;
   }): Promise<void> {
     await page.goto('https://google.com');
-    await page.getByRole('combobox', { name: 'Search' }).click();
-    await page.getByRole('combobox', { name: 'Search' }).fill('steve carell');
-    await page.getByRole('button', { name: 'Google Search' }).first().click();
+    if (isLambda()) {
+      await page.getByRole('combobox', { name: 'Search' }).click();
+      await page.getByRole('combobox', { name: 'Search' }).fill('steve carell');
+      await page.getByRole('button', { name: 'Google Search' }).first().click();
+    } else {
+      await page.getByRole('combobox', { name: 'Buscar' }).click();
+      await page.getByRole('combobox', { name: 'Buscar' }).fill('steve carell');
+      await page
+        .getByRole('button', { name: 'Buscar con Google' })
+        .first()
+        .click();
+    }
     const title = await page.title();
     console.log('title:', title);
+    const mailer = await getMailer();
+    await mailer.sendMail({
+      to: {
+        name: 'Carlos',
+        address: 'carlos.rgn@gmail.com',
+      },
+      subject: 'google title result',
+      text: `title: ${title}`,
+    });
     // await page.pause();
   }
 }
