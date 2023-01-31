@@ -13,14 +13,12 @@ export async function getMailer(): Promise<Transporter> {
       account = process.env.MAILER_SMTP_ACCOUNT!;
       password = process.env.MAILER_SMTP_PASSWORD!;
     } else {
-      console.log('going to call getJobRunnerSecrets');
       ({
         mailerConfig: {
           smtp: { account, password },
         },
       } = await getJobRunnerSecrets());
     }
-    console.log(`Mailer using account ${account} ${password}`);
     transport = createTransport({
       service: 'gmail',
       auth: {

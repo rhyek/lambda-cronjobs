@@ -6,13 +6,11 @@ import { MailerConfig } from '../../../shared';
 
 let secrets: object | null = null;
 async function getSecrets<T extends object>(): Promise<T> {
-  console.log('called getJobRunnerSecrets');
   if (!secrets) {
     const secretArnsJson = process.env.SECRET_ARNS;
     if (!secretArnsJson) {
       throw new Error('Secret ARNs env not available');
     }
-    console.log('secret arns json', secretArnsJson);
     const client = new SecretsManagerClient({});
     const secretArns = JSON.parse(secretArnsJson) as T;
     secrets = Object.fromEntries(
@@ -31,8 +29,15 @@ async function getSecrets<T extends object>(): Promise<T> {
       )
     ) as T;
   }
-  console.log('secret keys', JSON.stringify(secrets, null, 2));
   return secrets as T;
 }
 
-export const getJobRunnerSecrets = getSecrets<{ mailerConfig: MailerConfig }>;
+export async function getJobRunnerSecrets<
+  T extends { mailerConfig: MailerConfig }
+>(): Promise<T> {
+  const secrets = await getSecrets<Record<keyof T, string>>();
+  return {
+    ...secrets,
+    mailerConfig: JSON.parse(secrets.mailerConfig),
+  } as T;
+}
