@@ -31,7 +31,7 @@ async function getSecrets<T extends object>(): Promise<T> {
       )
     ) as T;
   }
-  console.log('secret keys', Object.keys(secrets));
+  console.log('secret keys', JSON.stringify(secrets, null, 2));
   return secrets as T;
 }
 
