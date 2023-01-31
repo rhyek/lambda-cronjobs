@@ -11,6 +11,7 @@ async function getSecrets<T extends object>(): Promise<T> {
     if (!secretArnsJson) {
       throw new Error('Secret ARNs env not available');
     }
+    console.log('secret arns json', secretArnsJson);
     const secretArns = JSON.parse(secretArnsJson) as T;
     const client = new SecretsManagerClient({});
     secrets = Object.fromEntries(
@@ -22,9 +23,7 @@ async function getSecrets<T extends object>(): Promise<T> {
             })
           );
           if (!secretValue.SecretString) {
-            throw new Error(
-              `Could not obtain secret ${process.env.MAILER_SECRET_ARN}`
-            );
+            throw new Error(`Could not obtain secret ${key} with arn ${arn}`);
           }
           return [key, secretValue.SecretString] as [keyof T, string];
         })

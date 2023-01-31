@@ -6,12 +6,12 @@ const config = new pulumi.Config();
 
 const mailerConfig = config.requireSecretObject<MailerConfig>('mailer');
 
-const mailerSecret = new aws.secretsmanager.Secret('mailer');
+const mailerConfigSecret = new aws.secretsmanager.Secret('mailer');
 new aws.secretsmanager.SecretVersion('mailer', {
-  secretId: mailerSecret.id,
-  secretString: mailerConfig.apply((config) => JSON.stringify(config)),
+  secretId: mailerConfigSecret.id,
+  secretString: mailerConfig.apply((mailer) => JSON.stringify(mailer)),
 });
-export const mailerSecretArn = mailerSecret.id;
+export const mailerConfigSecretArn = mailerConfigSecret.id;
 
 const jobRunnerImageRepo = new aws.ecr.Repository('job-runner');
 export const repoUrls = {
