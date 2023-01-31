@@ -2,6 +2,7 @@ import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
 import { JobRunnerMessagePayload } from '../../../shared/sqs-message-payloads';
 import { JobName } from '../../../shared/job-names';
+import { Output } from '@pulumi/pulumi';
 
 const config = new pulumi.Config();
 
@@ -10,7 +11,9 @@ const resourceName = 'job-runner';
 const resourcesStack = new pulumi.StackReference(
   `rhyek/lambda-cronjobs.resources/${pulumi.getStack()}`
 );
-const mailerSecretArn = resourcesStack.getOutput('mailerSecretArn');
+const mailerSecretArn = resourcesStack.getOutput(
+  'mailerSecretArn'
+) as Output<string>;
 
 const queue = new aws.sqs.Queue(resourceName, {
   visibilityTimeoutSeconds: 5 * 60,
@@ -105,11 +108,15 @@ const lambda = new aws.lambda.Function(resourceName, {
   memorySize: 1024,
   environment: {
     variables: {
+      SECRET_ARNS: pulumi.all([mailerSecretArn]).apply(([mailerSecretArn]) =>
+        JSON.stringify({
+          mailerConfig: mailerSecretArn,
+        })
+      ),
       JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_EMAIL:
         jobCheckMexicanEmbassyVisaAppointmentAvailability.email,
       JOB_CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY_PASSWORD:
         jobCheckMexicanEmbassyVisaAppointmentAvailability.password,
-      MAILER_SECRET_ARN: mailerSecretArn,
     },
   },
 });
