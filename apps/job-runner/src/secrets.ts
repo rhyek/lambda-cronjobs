@@ -13,8 +13,8 @@ async function getSecrets<T extends object>(): Promise<T> {
       throw new Error('Secret ARNs env not available');
     }
     console.log('secret arns json', secretArnsJson);
-    const secretArns = JSON.parse(secretArnsJson) as T;
     const client = new SecretsManagerClient({});
+    const secretArns = JSON.parse(secretArnsJson) as T;
     secrets = Object.fromEntries(
       await Promise.all(
         Object.entries(secretArns).map(async ([key, arn]) => {
@@ -31,6 +31,7 @@ async function getSecrets<T extends object>(): Promise<T> {
       )
     ) as T;
   }
+  console.log('secret keys', Object.keys(secrets));
   return secrets as T;
 }
 
