@@ -8,7 +8,7 @@ const config = new pulumi.Config();
 const resourceName = 'job-runner';
 
 const resourcesStack = new pulumi.StackReference(
-  `rhyek/lambda-cronjobs/${pulumi.getStack()}`
+  `rhyek/lambda-cronjobs.resources/${pulumi.getStack()}`
 );
 
 const queue = new aws.sqs.Queue(resourceName, {
