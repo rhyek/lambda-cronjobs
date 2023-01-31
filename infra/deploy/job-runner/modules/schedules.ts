@@ -11,11 +11,11 @@ const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
     scheduleExpression:
       'cron(0 1,13,16,19,22 ? * * *)' /* every 3 hours during the day */,
   },
-  {
-    jobName: JobName.GOOGLE_TITLE,
-    // scheduleExpression: 'cron(0/10 * ? * * *)' /* every 10 minutes */,
-    scheduleExpression: 'cron(* * ? * * *)' /* every minute */,
-  },
+  // {
+  //   jobName: JobName.GOOGLE_TITLE,
+  //   // scheduleExpression: 'cron(0/10 * ? * * *)' /* every 10 minutes */,
+  //   scheduleExpression: 'cron(* * ? * * *)' /* every minute */,
+  // },
 ];
 
 for (const { jobName, scheduleExpression } of jobSchedules) {
