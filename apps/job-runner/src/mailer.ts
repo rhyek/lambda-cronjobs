@@ -1,10 +1,5 @@
 // https://www.pulumi.com/blog/safe-lambda-secrets/
 import { createTransport, Transporter } from 'nodemailer';
-import {
-  SecretsManagerClient,
-  GetSecretValueCommand,
-} from '@aws-sdk/client-secrets-manager';
-import { MailerConfig } from '../../../shared';
 import { isLambda } from './utils';
 import { getJobRunnerSecrets } from './secrets';
 
@@ -18,6 +13,7 @@ export async function getMailer(): Promise<Transporter> {
       account = process.env.MAILER_SMTP_ACCOUNT!;
       password = process.env.MAILER_SMTP_PASSWORD!;
     } else {
+      console.log('going to call getJobRunnerSecrets');
       ({
         mailerConfig: {
           smtp: { account, password },

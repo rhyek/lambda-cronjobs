@@ -4,8 +4,9 @@ import {
 } from '@aws-sdk/client-secrets-manager';
 import { MailerConfig } from '../../../shared';
 
-let secrets: any = null;
+let secrets: object | null = null;
 async function getSecrets<T extends object>(): Promise<T> {
+  console.log('called getJobRunnerSecrets');
   if (!secrets) {
     const secretArnsJson = process.env.SECRET_ARNS;
     if (!secretArnsJson) {
@@ -30,7 +31,7 @@ async function getSecrets<T extends object>(): Promise<T> {
       )
     ) as T;
   }
-  return secrets;
+  return secrets as T;
 }
 
 export const getJobRunnerSecrets = getSecrets<{ mailerConfig: MailerConfig }>;

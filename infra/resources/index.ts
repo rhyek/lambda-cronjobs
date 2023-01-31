@@ -6,8 +6,8 @@ const config = new pulumi.Config();
 
 const mailerConfig = config.requireSecretObject<MailerConfig>('mailer');
 
-const mailerConfigSecret = new aws.secretsmanager.Secret('mailer');
-new aws.secretsmanager.SecretVersion('mailer', {
+const mailerConfigSecret = new aws.secretsmanager.Secret('mailer-config');
+new aws.secretsmanager.SecretVersion('mailer-config', {
   secretId: mailerConfigSecret.id,
   secretString: mailerConfig.apply((mailer) => JSON.stringify(mailer)),
 });
