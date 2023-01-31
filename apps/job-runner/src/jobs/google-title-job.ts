@@ -1,5 +1,5 @@
 import { Browser, Page } from 'playwright-core';
-import { getMailer } from '../mailer';
+import { getMailer, mailToMe } from '../mailer';
 import { isLambda } from '../utils';
 import { PlaywrightJob } from './_playwright-job';
 
@@ -25,12 +25,7 @@ export class GoogleTitleJob extends PlaywrightJob {
     }
     const title = await page.title();
     console.log('title:', title);
-    const mailer = await getMailer();
-    await mailer.sendMail({
-      to: {
-        name: 'Carlos',
-        address: 'carlos.rgn@gmail.com',
-      },
+    await mailToMe({
       subject: 'google title result',
       text: `title: ${title}`,
     });

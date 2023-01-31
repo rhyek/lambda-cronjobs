@@ -11,6 +11,7 @@ const config = new pulumi.Config();
 const resourcesStack = new pulumi.StackReference(
   `rhyek/lambda-cronjobs.resources/${pulumi.getStack()}`
 );
+
 const mailerConfigSecretArn = resourcesStack.getOutput(
   'mailerConfigSecretArn'
 ) as Output<string>;

@@ -29,3 +29,22 @@ export async function getMailer(): Promise<Transporter> {
   }
   return transport;
 }
+
+export async function mailToMe({
+  subject,
+  text,
+}: {
+  subject: string;
+  text: string;
+}): Promise<void> {
+  const mailer = await getMailer();
+  await mailer.sendMail({
+    to: isLambda()
+      ? (
+          await getJobRunnerSecrets()
+        ).mailerConfig.me
+      : process.env.MAILER_ME!,
+    subject,
+    text,
+  });
+}

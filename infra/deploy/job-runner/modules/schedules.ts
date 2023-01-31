@@ -5,12 +5,12 @@ import { resourceName } from './resource-name';
 import { queue } from './sqs';
 
 const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
-  // {
-  //   jobName: JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY,
-  //   // scheduleExpression: 'cron(* * * * ? *)' /* every minute */,
-  //   scheduleExpression:
-  //     'cron(0 0,2,12,14,16,18,20,22 ? * * *)' /* every 2 hours */,
-  // },
+  {
+    jobName: JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY,
+    // scheduleExpression: 'cron(* * * * ? *)' /* every minute */,
+    scheduleExpression:
+      'cron(0 1,13,16,19,22 ? * * *)' /* every 3 hours during the day */,
+  },
   {
     jobName: JobName.GOOGLE_TITLE,
     // scheduleExpression: 'cron(0/10 * ? * * *)' /* every 10 minutes */,

@@ -3,6 +3,7 @@ import { isEqual } from 'lodash';
 import { PlaywrightJob } from './_playwright-job';
 import { getJobRunnerSecrets } from '../secrets';
 import { isLambda } from '../utils';
+import { mailToMe } from '../mailer';
 
 export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJob {
   protected override async playwrightRun({
@@ -101,16 +102,27 @@ export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJo
       .getByPlaceholder('--Selecciona--')
       .click();
 
-    const result = await page.evaluate(() => {
+    const appointmentTypes = await page.evaluate(() => {
       return Array.from(document.querySelectorAll('#vs10__listbox > li')).map(
         (li) => li.textContent?.trim()
       );
     });
 
-    const shouldNotify = !isEqual(result, [
+    const shouldNotify = !isEqual(appointmentTypes, [
       'Con permiso del INM (Validación vía servicio web con el INM)',
     ]);
 
-    console.log('should notify', shouldNotify);
+    console.log(
+      'should notify',
+      shouldNotify,
+      JSON.stringify(appointmentTypes, null, 2)
+    );
+
+    if (shouldNotify) {
+      await mailToMe({
+        subject: 'Mexican visa appointments changed',
+        text: JSON.stringify(appointmentTypes, null, 2),
+      });
+    }
   }
 }
