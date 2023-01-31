@@ -20,7 +20,7 @@ const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
 for (const { jobName, scheduleExpression } of jobSchedules) {
   aws.cloudwatch.onSchedule(
     truncatePulumiResourceName(`${resourceName}-run-${jobName}`),
-    scheduleExpression, // every minute
+    scheduleExpression,
     async () => {
       const client = new aws.sdk.SQS();
       const req = await client
