@@ -44,9 +44,9 @@ export async function getJobRunnerSecrets<
   const secrets = await getSecrets<Record<keyof T, string>>();
   return {
     ...secrets,
-    mailerConfig: JSON.parse(secrets.mailerConfig) as MailerConfig,
+    mailerConfig: JSON.parse(secrets.mailerConfig),
     jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig: JSON.parse(
       secrets.jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig
-    ) as JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig,
+    ),
   } as T;
 }
