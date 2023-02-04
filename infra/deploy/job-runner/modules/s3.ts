@@ -17,17 +17,19 @@ new aws.s3.BucketPublicAccessBlock(resourceName, {
 // https://www.pulumi.com/docs/aws/s3/#create-an-aws-s3-resource-using-pulumiaws
 new aws.s3.BucketPolicy(resourceName, {
   bucket: playwrightTracessS3Bucket.bucket,
-  policy: JSON.stringify({
-    Version: '2012-10-17',
-    Statement: [
-      {
-        Effect: 'Allow',
-        Principal: '*',
-        Action: ['s3:GetObject'],
-        Resource: [playwrightTracessS3Bucket.arn.apply((arn) => `${arn}/*`)],
-      },
-    ],
-  }),
+  policy: playwrightTracessS3Bucket.arn.apply((playwrightTracessS3BucketArn) =>
+    JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Principal: '*',
+          Action: ['s3:GetObject'],
+          Resource: [`${playwrightTracessS3BucketArn}/*`],
+        },
+      ],
+    })
+  ),
 });
 
 export const playwrightTracesS3BucketLambdaPutObjectPolicy = new aws.iam.Policy(
