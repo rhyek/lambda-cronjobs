@@ -14,19 +14,20 @@ new aws.s3.BucketPublicAccessBlock(resourceName, {
   restrictPublicBuckets: false,
 });
 
-const bucketPolicyDoc = aws.iam.getPolicyDocumentOutput({
-  statements: [
-    {
-      effect: 'Allow',
-      actions: ['s3:GetObject'],
-      resources: [playwrightTracessS3Bucket.arn.apply((arn) => `${arn}/*`)],
-    },
-  ],
-});
-
+// https://www.pulumi.com/docs/aws/s3/#create-an-aws-s3-resource-using-pulumiaws
 new aws.s3.BucketPolicy(resourceName, {
   bucket: playwrightTracessS3Bucket.bucket,
-  policy: bucketPolicyDoc.apply((doc) => doc.json),
+  policy: JSON.stringify({
+    Version: '2012-10-17',
+    Statement: [
+      {
+        Effect: 'Allow',
+        Principal: '*',
+        Action: ['s3:GetObject'],
+        Resource: [playwrightTracessS3Bucket.arn.apply((arn) => `${arn}/*`)],
+      },
+    ],
+  }),
 });
 
 export const playwrightTracesS3BucketLambdaPutObjectPolicy = new aws.iam.Policy(
