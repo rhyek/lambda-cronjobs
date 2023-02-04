@@ -1,4 +1,4 @@
-import { Browser, Page } from 'playwright-core';
+import { Browser, Page } from 'playwright';
 import { isEqual } from 'lodash';
 import { PlaywrightJob } from './_playwright-job';
 import { getJobRunnerSecrets } from '../secrets';

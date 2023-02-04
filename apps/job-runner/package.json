@@ -1,16 +1,17 @@
 {
   "name": "job-runner",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/dev.ts",
+    "dev": "ts-node-dev --respawn --inspect -- src/dev.ts",
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "~3.264.0",
     "@aws-sdk/client-secrets-manager": "~3.261.0",
     "dayjs": "~1.11.7",
     "lodash": "~4.17.21",
     "nodemailer": "~6.9.1",
-    "playwright-aws-lambda": "~0.9.0",
-    "playwright-core": "~1.30.0"
+    "playwright": "~1.30.0",
+    "playwright-aws-lambda": "~0.9.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "~8.10.110",

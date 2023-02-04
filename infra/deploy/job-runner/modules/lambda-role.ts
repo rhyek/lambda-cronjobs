@@ -1,5 +1,6 @@
 import * as aws from '@pulumi/aws';
 import { resourceName } from './resource-name';
+import { playwrightTracesS3BucketLambdaPutObjectPolicy } from './s3';
 import {
   jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
   mailerConfigSecretArn,
@@ -24,24 +25,34 @@ new aws.iam.RolePolicyAttachment(`${resourceName}-sqs`, {
 });
 // custom
 // https://www.pulumi.com/blog/safe-lambda-secrets/
-const lambdaPolicyDoc = aws.iam.getPolicyDocumentOutput({
-  statements: [
-    {
-      effect: 'Allow',
-      actions: ['secretsmanager:GetSecretValue'],
-      resources: [
-        mailerConfigSecretArn,
-        jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
-      ],
-    },
-  ],
-});
 const lambdaRolePolicy = new aws.iam.Policy(`${resourceName}-custom`, {
-  policy: lambdaPolicyDoc.apply((doc) => doc.json),
+  policy: aws.iam
+    .getPolicyDocumentOutput({
+      statements: [
+        {
+          effect: 'Allow',
+          actions: ['secretsmanager:GetSecretValue'],
+          resources: [
+            mailerConfigSecretArn,
+            jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
+          ],
+        },
+      ],
+    })
+    .apply((doc) => doc.json),
 });
 new aws.iam.RolePolicyAttachment(`${resourceName}-custom`, {
   role: lambdaRole.name,
   policyArn: lambdaRolePolicy.arn,
 });
+
+// playwright traces bucket write access: https://link.medium.com/wEyg8zQG9wb
+new aws.iam.RolePolicyAttachment(
+  `${resourceName}-playwright-traces-put-access`,
+  {
+    role: lambdaRole.name,
+    policyArn: playwrightTracesS3BucketLambdaPutObjectPolicy.arn,
+  }
+);
 
 export { lambdaRole };

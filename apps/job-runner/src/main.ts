@@ -2,9 +2,11 @@ import type { Handler, SQSEvent } from 'aws-lambda';
 import dayjs from 'dayjs';
 import { JobName } from '../../../shared/job-names';
 import { JobRunnerMessagePayload } from '../../../shared/sqs-message-payloads';
+import { JobError } from './job-error';
 import { CheckMexicanEmbassyVisaAppointmentAvailability } from './jobs/check-mexican-embassy-visa-appointments';
 import { GoogleTitleJob } from './jobs/google-title-job';
 import { Job } from './jobs/_job';
+import { getMailer, mailToMe } from './mailer';
 
 export const jobs: { [x in JobName]?: Job } = {
   [JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY]:
@@ -23,8 +25,23 @@ export async function runJob(jobName: JobName) {
   try {
     await job.run();
     console.log('Finished successfully');
-  } catch (error) {
+  } catch (_error) {
+    const error: Error = _error.cause ?? _error;
     console.error(error);
+    // email
+    const emailSubject = `Lambda cronjobs: Job ${job.constructor.name} failed`;
+    let emailBody = `Error message: ${error.message}
+Stack trace:
+${error.stack}
+`;
+    if (_error instanceof JobError && _error.extraEmailText) {
+      emailBody += `Extra:
+${_error.extraEmailText}`;
+    }
+    await mailToMe({
+      subject: emailSubject,
+      text: emailBody,
+    });
   }
   console.log(`Finished in ${dayjs().diff(start, 'seconds')}s`);
 }
