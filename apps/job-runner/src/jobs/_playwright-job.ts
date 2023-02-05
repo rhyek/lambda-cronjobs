@@ -57,11 +57,17 @@ export abstract class PlaywrightJob extends Job {
           Body: buffer,
         });
         await s3Client.send(command);
-        const objectUrl = `https://${bucket}.s3-${region}.amazonaws.com/${objectKey}`;
+        const objectUrl = `https://${bucket}.s3.${region}.amazonaws.com/${encodeURIComponent(
+          objectKey
+        )}`;
         const viewTraceUrl = `https://trace.playwright.dev/?trace=${objectUrl}`;
         throw new JobError(
           error as Error,
-          `\nTrace file: ${objectUrl}.\nView trace: ${viewTraceUrl}`
+          `
+Trace file: ${objectUrl}.
+
+View trace: ${viewTraceUrl}\
+`
         );
       } else {
         throw new JobError(error as Error);
