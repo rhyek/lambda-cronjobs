@@ -39,19 +39,28 @@ export abstract class PlaywrightJob extends Job {
         isLambda() &&
         context
       ) {
-        const traceAbsolutePath = '/tmp/trace.zip';
+        const zipExtension = '.zip';
+        const traceAbsolutePath = `/tmp/trace${zipExtension}`;
         await context.tracing.stop({ path: traceAbsolutePath });
         const buffer = await fs.readFile(traceAbsolutePath);
         const s3Client = new S3Client({});
+        const objectKey = `${new Date().toISOString()}_${
+          this.constructor.name
+        }${zipExtension}`;
+        const bucket = process.env.PLAYWRIGHT_TRACES_S3_BUCKET!;
         const command = new PutObjectCommand({
-          Bucket: process.env.PLAYWRIGHT_TRACES_S3_BUCKET!,
-          Key: `${new Date().toISOString()}_${this.constructor.name}`,
+          Bucket: bucket,
+          Key: objectKey,
+          ContentType: 'application/zip',
           Body: buffer,
         });
-        const result = await s3Client.send(command);
-        console.log('put result', JSON.stringify(result, null, 2));
-        // https://trace.playwright.dev/?trace=https://demo.playwright.dev/reports/todomvc/data/cb0fa77ebd9487a5c899f3ae65a7ffdbac681182.zip
-        throw new JobError(error as Error, `Trace url: pending`);
+        await s3Client.send(command);
+        const objectUrl = `https://${bucket}.s3-${s3Client.config.region}.amazonaws.com/${objectKey}`;
+        const viewTraceUrl = `https://trace.playwright.dev/?trace=${objectUrl}`;
+        throw new JobError(
+          error as Error,
+          `Trace file: ${objectUrl}.\nView trace: ${viewTraceUrl}`
+        );
       } else {
         throw new JobError(error as Error);
       }
