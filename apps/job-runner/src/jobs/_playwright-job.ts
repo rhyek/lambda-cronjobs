@@ -24,7 +24,10 @@ export abstract class PlaywrightJob extends Job {
         : await chromium.launch({
             headless: false,
           });
-      context = await browser.newContext();
+      context = await browser.newContext({
+        userAgent:
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+      });
       if (isLambda()) {
         await context.tracing.start({
           screenshots: true,
@@ -32,11 +35,8 @@ export abstract class PlaywrightJob extends Job {
           sources: true,
         });
       }
-      const page = await browser.newPage({
-        userAgent:
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
-      });
-      await this.playwrightRun({ browser, page });
+      const page = await context.newPage();
+      await this.playwrightRun({ page });
     } catch (error) {
       if (
         error instanceof playwrightErrors.TimeoutError &&
@@ -81,11 +81,5 @@ View trace: ${viewTraceUrl}\
     }
   }
 
-  protected abstract playwrightRun({
-    browser,
-    page,
-  }: {
-    browser: Browser;
-    page: Page;
-  }): Promise<void>;
+  protected abstract playwrightRun({ page }: { page: Page }): Promise<void>;
 }

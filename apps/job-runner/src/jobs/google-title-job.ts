@@ -7,7 +7,6 @@ export class GoogleTitleJob extends PlaywrightJob {
   protected override async playwrightRun({
     page,
   }: {
-    browser: Browser;
     page: Page;
   }): Promise<void> {
     await page.goto('https://google.com');

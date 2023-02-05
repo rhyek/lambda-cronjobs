@@ -9,7 +9,6 @@ export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJo
   protected override async playwrightRun({
     page,
   }: {
-    browser: Browser;
     page: Page;
   }): Promise<void> {
     const closeNotice = () => page!.locator('a svg').first().click();
