@@ -26,7 +26,11 @@ export abstract class PlaywrightJob extends Job {
           });
       context = await browser.newContext();
       if (isLambda()) {
-        await context.tracing.start({ screenshots: true, snapshots: true });
+        await context.tracing.start({
+          screenshots: true,
+          snapshots: true,
+          sources: true,
+        });
       }
       const page = await browser.newPage({
         userAgent:
@@ -53,7 +57,6 @@ export abstract class PlaywrightJob extends Job {
         const command = new PutObjectCommand({
           Bucket: bucket,
           Key: objectKey,
-          ContentType: 'application/zip',
           Body: buffer,
         });
         await s3Client.send(command);
