@@ -41,7 +41,9 @@ export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJo
     await page.getByRole('button', { name: 'Ingresar' }).click();
     await page.getByText('Programar', { exact: true }).click();
     await closeNotice();
-    await closeNotice();
+    try {
+      await closeNotice();
+    } catch {}
     await page.getByText('Seleccionar').click();
     await page.getByRole('button', { name: 'Aceptar' }).click();
     await page.getByText('Agregar Manualmente').click();
@@ -107,21 +109,21 @@ export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJo
       );
     });
 
-    const shouldNotify = !isEqual(appointmentTypes, [
+    const didChange = !isEqual(appointmentTypes, [
       'Con permiso del INM (Validación vía servicio web con el INM)',
     ]);
 
     console.log(
-      'should notify',
-      shouldNotify,
+      'did change',
+      didChange,
       JSON.stringify(appointmentTypes, null, 2)
     );
 
-    if (shouldNotify) {
-      await mailToMe({
-        subject: 'Mexican visa appointments changed',
-        text: JSON.stringify(appointmentTypes, null, 2),
-      });
-    }
+    await mailToMe({
+      subject: `Mexican visa appointments ${
+        didChange ? 'changed' : 'did NOT change'
+      }`,
+      text: JSON.stringify(appointmentTypes, null, 2),
+    });
   }
 }
