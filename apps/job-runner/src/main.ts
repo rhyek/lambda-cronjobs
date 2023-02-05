@@ -21,8 +21,9 @@ export async function runJob(jobName: JobName) {
     console.warn(`No job found for name ${jobName}`);
     return;
   }
+  const jobClassName = job.constructor.name;
   const start = dayjs();
-  console.log(`Starting job ${jobName}`);
+  console.log(`Starting job ${jobClassName}`);
   try {
     await job.run();
     console.log('Finished successfully');
@@ -30,7 +31,7 @@ export async function runJob(jobName: JobName) {
     const error: Error = _error.cause ?? _error;
     console.error(error);
     // email
-    const emailSubject = `Lambda cronjobs: Job ${job.constructor.name} failed`;
+    const emailSubject = `Lambda cronjobs: Job ${jobClassName} failed`;
     let emailBody = `Error message:
     
 ${error.message}
