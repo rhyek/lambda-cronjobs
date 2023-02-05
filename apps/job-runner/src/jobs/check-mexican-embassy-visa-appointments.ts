@@ -11,7 +11,8 @@ export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJo
   }: {
     page: Page;
   }): Promise<void> {
-    const closeNotice = () => page!.locator('a svg').first().click();
+    const closeNotice = () =>
+      page!.locator('a svg').first().click({ timeout: 10_000 });
 
     let email: string;
     let password: string;
