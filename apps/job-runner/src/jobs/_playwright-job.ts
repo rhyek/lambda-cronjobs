@@ -44,7 +44,7 @@ export abstract class PlaywrightJob extends Job {
         await context.tracing.stop({ path: traceAbsolutePath });
         const buffer = await fs.readFile(traceAbsolutePath);
         const s3Client = new S3Client({});
-        const objectKey = `${new Date().toISOString()}_${
+        const objectKey = `${new Date().getTime()}_${
           this.constructor.name
         }${zipExtension}`;
         // AWS_REGION is provided by lambda: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
@@ -64,7 +64,7 @@ export abstract class PlaywrightJob extends Job {
         throw new JobError(
           error as Error,
           `
-Trace file: ${objectUrl}.
+Trace file: ${objectUrl}
 
 View trace: ${viewTraceUrl}\
 `
