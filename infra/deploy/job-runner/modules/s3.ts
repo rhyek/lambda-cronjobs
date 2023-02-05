@@ -14,6 +14,16 @@ new aws.s3.BucketPublicAccessBlock(resourceName, {
   restrictPublicBuckets: false,
 });
 
+new aws.s3.BucketCorsConfigurationV2(resourceName, {
+  bucket: playwrightTracessS3Bucket.id,
+  corsRules: [
+    {
+      allowedMethods: ['*'],
+      allowedOrigins: ['https://trace.playwright.dev'],
+    },
+  ],
+});
+
 // https://www.pulumi.com/docs/aws/s3/#create-an-aws-s3-resource-using-pulumiaws
 new aws.s3.BucketPolicy(resourceName, {
   bucket: playwrightTracessS3Bucket.bucket,
