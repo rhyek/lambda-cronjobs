@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import type { Handler, SQSEvent } from 'aws-lambda';
 import dayjs from 'dayjs';
 import { JobName } from '../../../shared/job-names';
@@ -6,7 +7,7 @@ import { JobError } from './job-error';
 import { CheckMexicanEmbassyVisaAppointmentAvailability } from './jobs/check-mexican-embassy-visa-appointments';
 import { GoogleTitleJob } from './jobs/google-title-job';
 import { Job } from './jobs/_job';
-import { getMailer, mailToMe } from './mailer';
+import { mailToMe } from './mailer';
 
 export const jobs: { [x in JobName]?: Job } = {
   [JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY]:
