@@ -47,7 +47,7 @@ export abstract class PlaywrightJob extends Job {
         const objectKey = `${new Date().toISOString()}_${
           this.constructor.name
         }${zipExtension}`;
-        // AWS_REGION is provided by lambda: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html
+        // AWS_REGION is provided by lambda: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
         const region = process.env.AWS_REGION!;
         const bucket = process.env.PLAYWRIGHT_TRACES_S3_BUCKET!;
         const command = new PutObjectCommand({
