@@ -11,11 +11,11 @@ export class GoogleTitleJob extends PlaywrightJob {
   }): Promise<void> {
     await page.goto('https://google.com');
     if (isLambda()) {
-      await page.getByRole('combobox', { name: 'Searrch' }).click();
+      await page.getByRole('combobox', { name: 'Search' }).click();
       await page.getByRole('combobox', { name: 'Search' }).fill('steve carell');
       await page.getByRole('button', { name: 'Google Search' }).first().click();
     } else {
-      await page.getByRole('combobox', { name: 'Budscar' }).click();
+      await page.getByRole('combobox', { name: 'Buscar' }).click();
       await page.getByRole('combobox', { name: 'Buscar' }).fill('steve carell');
       await page
         .getByRole('button', { name: 'Buscar con Google' })
