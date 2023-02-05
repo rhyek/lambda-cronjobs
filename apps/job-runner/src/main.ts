@@ -31,11 +31,13 @@ export async function runJob(jobName: JobName) {
     // email
     const emailSubject = `Lambda cronjobs: Job ${job.constructor.name} failed`;
     let emailBody = `Error message: ${error.message}
+
 Stack trace:
 ${error.stack}
 `;
     if (_error instanceof JobError && _error.extraEmailText) {
-      emailBody += `Extra:
+      emailBody += `
+Extra:
 ${_error.extraEmailText}`;
     }
     await mailToMe({

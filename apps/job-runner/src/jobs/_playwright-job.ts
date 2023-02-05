@@ -47,6 +47,7 @@ export abstract class PlaywrightJob extends Job {
         const objectKey = `${new Date().toISOString()}_${
           this.constructor.name
         }${zipExtension}`;
+        const region = process.env.AWS_REGION!;
         const bucket = process.env.PLAYWRIGHT_TRACES_S3_BUCKET!;
         const command = new PutObjectCommand({
           Bucket: bucket,
@@ -55,11 +56,11 @@ export abstract class PlaywrightJob extends Job {
           Body: buffer,
         });
         await s3Client.send(command);
-        const objectUrl = `https://${bucket}.s3-${s3Client.config.region}.amazonaws.com/${objectKey}`;
+        const objectUrl = `https://${bucket}.s3-${region}.amazonaws.com/${objectKey}`;
         const viewTraceUrl = `https://trace.playwright.dev/?trace=${objectUrl}`;
         throw new JobError(
           error as Error,
-          `Trace file: ${objectUrl}.\nView trace: ${viewTraceUrl}`
+          `\nTrace file: ${objectUrl}.\nView trace: ${viewTraceUrl}`
         );
       } else {
         throw new JobError(error as Error);
