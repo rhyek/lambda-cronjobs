@@ -18,7 +18,7 @@ new aws.s3.BucketCorsConfigurationV2(resourceName, {
   bucket: playwrightTracessS3Bucket.id,
   corsRules: [
     {
-      allowedMethods: ['*'],
+      allowedMethods: ['GET'],
       allowedOrigins: ['https://trace.playwright.dev'],
     },
   ],
