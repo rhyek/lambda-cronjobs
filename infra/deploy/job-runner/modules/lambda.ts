@@ -8,7 +8,6 @@ import { resourceName } from '../modules/resource-name';
 import { lambdaRole } from '../modules/lambda-role';
 import { queue } from '../modules/sqs';
 import { playwrightTracessS3Bucket } from './s3';
-import { config } from './config';
 
 const imageUri = process.env.IMAGE_URI!;
 const arch = process.env.ARCH!;
@@ -22,7 +21,6 @@ const lambda = new aws.lambda.Function(resourceName, {
   memorySize: 1024,
   environment: {
     variables: {
-      AWS_REGION: config.aws.region,
       PLAYWRIGHT_TRACES_S3_BUCKET: playwrightTracessS3Bucket.id,
       SECRET_ARNS: pulumi
         .all([
