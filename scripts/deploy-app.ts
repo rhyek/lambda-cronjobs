@@ -12,8 +12,16 @@ const __dirname = dirname(import.meta.url);
 process.chdir(__dirname);
 
 const tag = new Date().getTime().toString();
+
+const { stdout: region } = await execaCommand(
+  'pulumi config --stack dev get aws:region',
+  {
+    cwd: '../infra/resources',
+  }
+);
+
 await execaCommand(
-  `aws ecr get-login-password | docker login -u AWS --password-stdin "https://$(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.${process.env.AWS_DEFAULT_REGION}.amazonaws.com"`,
+  `aws ecr get-login-password | docker login -u AWS --password-stdin "https://$(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.${region}.amazonaws.com"`,
   {
     stdio: 'inherit',
     shell: true,
@@ -52,7 +60,7 @@ await execa(
           `type=gha,scope=${appName},mode=max,url=${process.env.ACTIONS_CACHE_URL},token=${process.env.ACTIONS_RUNTIME_TOKEN}`,
         ]
       : []),
-    '--push',
+    '--load',
     '.',
   ],
   {
@@ -60,11 +68,12 @@ await execa(
     stdio: 'inherit',
   }
 );
-await execaCommand('pulumi up --stack dev --yes', {
-  cwd: `../infra/deploy/${appName}`,
-  stdio: 'inherit',
-  env: {
-    IMAGE_URI: imageUri,
-    ARCH: arch,
-  },
-});
+
+// await execaCommand('pulumi up --stack dev --yes', {
+//   cwd: `../infra/deploy/${appName}`,
+//   stdio: 'inherit',
+//   env: {
+//     IMAGE_URI: imageUri,
+//     ARCH: arch,
+//   },
+// });
