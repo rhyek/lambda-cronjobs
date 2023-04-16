@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/dev.ts",
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc && cp ./package.json ./dist/apps/job-runner/package.json"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "~3.264.0",
