@@ -1,7 +1,7 @@
-import { Browser, Page } from 'playwright';
-import { mailToMe } from '../mailer';
-import { isLambda } from '../utils';
-import { PlaywrightJob } from './_playwright-job';
+import { Page } from 'playwright';
+import { mailToMe } from '../mailer.js';
+import { isLambda } from '../utils.js';
+import { PlaywrightJob } from './_playwright-job.js';
 
 export class GoogleTitleJob extends PlaywrightJob {
   protected override async playwrightRun({

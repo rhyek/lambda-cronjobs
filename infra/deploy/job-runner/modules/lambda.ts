@@ -1,13 +1,10 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
-import {
-  jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
-  mailerConfigSecretArn,
-} from '../modules/secrets';
-import { resourceName } from '../modules/resource-name';
-import { lambdaRole } from '../modules/lambda-role';
-import { queue } from '../modules/sqs';
-import { playwrightTracessS3Bucket } from './s3';
+import { secrets } from '../modules/secrets.js';
+import { resourceName } from '../modules/resource-name.js';
+import { lambdaRole } from '../modules/lambda-role.js';
+import { queue } from '../modules/sqs.js';
+import { playwrightTracessS3Bucket } from './s3.js';
 
 const imageUri = process.env.IMAGE_URI!;
 const arch = process.env.ARCH!;
@@ -22,22 +19,13 @@ const lambda = new aws.lambda.Function(resourceName, {
   environment: {
     variables: {
       PLAYWRIGHT_TRACES_S3_BUCKET: playwrightTracessS3Bucket.id,
-      SECRET_ARNS: pulumi
-        .all([
-          mailerConfigSecretArn,
-          jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
-        ])
-        .apply(
-          ([
-            mailerConfigSecretArn,
-            jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
-          ]) =>
-            JSON.stringify({
-              mailerConfig: mailerConfigSecretArn,
-              jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig:
-                jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
-            })
-        ),
+      SECRET_ARNS: pulumi.all(Object.values(secrets)).apply((secretArns) => {
+        return JSON.stringify(
+          Object.fromEntries(
+            secretArns.map((arn, index) => [Object.keys(secrets)[index], arn])
+          )
+        );
+      }),
     },
   },
 });

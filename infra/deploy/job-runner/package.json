@@ -1,8 +1,10 @@
 {
   "name": "lambda-cronjobs.deploy-job-runner",
   "main": "index.ts",
+  "type": "module",
   "devDependencies": {
-    "@types/node": "^16"
+    "@types/node": "^16",
+    "tsx": "~3.12.6"
   },
   "dependencies": {
     "@pulumi/pulumi": "^3.0.0",

@@ -1,10 +1,7 @@
 import * as aws from '@pulumi/aws';
-import { resourceName } from './resource-name';
-import { playwrightTracesS3BucketLambdaPutObjectPolicy } from './s3';
-import {
-  jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
-  mailerConfigSecretArn,
-} from './secrets';
+import { resourceName } from './resource-name.js';
+import { playwrightTracesS3BucketLambdaPutObjectPolicy } from './s3.js';
+import { secrets } from './secrets.js';
 
 const lambdaRole = new aws.iam.Role(resourceName, {
   assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal(
@@ -32,10 +29,7 @@ const lambdaRolePolicy = new aws.iam.Policy(`${resourceName}-custom`, {
         {
           effect: 'Allow',
           actions: ['secretsmanager:GetSecretValue'],
-          resources: [
-            mailerConfigSecretArn,
-            jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecretArn,
-          ],
+          resources: [...Object.values(secrets)],
         },
       ],
     })

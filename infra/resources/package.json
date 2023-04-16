@@ -1,8 +1,10 @@
 {
   "name": "lambda-cronjobs.resources",
   "main": "index.ts",
+  "type": "module",
   "devDependencies": {
-    "@types/node": "^16"
+    "@types/node": "^16",
+    "tsx": "~3.12.6"
   },
   "dependencies": {
     "@pulumi/aws": "^5.0.0",

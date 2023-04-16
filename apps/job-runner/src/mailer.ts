@@ -1,7 +1,7 @@
 // https://www.pulumi.com/blog/safe-lambda-secrets/
 import { createTransport, Transporter } from 'nodemailer';
-import { isLambda } from './utils';
-import { getJobRunnerSecrets } from './secrets';
+import { isLambda } from './utils.js';
+import { getJobRunnerSecrets } from './secrets.js';
 
 let transport: Transporter | null = null;
 

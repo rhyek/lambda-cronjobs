@@ -1,5 +1,6 @@
-import { JobName } from './job-names';
+import { JobName } from './job-names.js';
 
 export type JobRunnerMessagePayload = {
   job: JobName;
+  data: any;
 };

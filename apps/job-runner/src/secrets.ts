@@ -5,7 +5,7 @@ import {
 import {
   JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig,
   MailerConfig,
-} from '../../../shared';
+} from '../../../shared/index.js';
 
 let secrets: object | null = null;
 async function getSecrets<T extends object>(): Promise<T> {

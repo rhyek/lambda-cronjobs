@@ -1,6 +1,6 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env tsx
 import parseArgs from 'minimist';
-import execa, { command } from 'execa';
+import { execa, execaCommand } from 'execa';
 const {
   _: [appName],
 } = parseArgs(process.argv.slice(2));
@@ -9,14 +9,14 @@ process.chdir(__dirname);
 
 (async () => {
   const tag = new Date().getTime().toString();
-  await command(
+  await execaCommand(
     `aws ecr get-login-password | docker login -u AWS --password-stdin "https://$(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.${process.env.AWS_DEFAULT_REGION}.amazonaws.com"`,
     {
       stdio: 'inherit',
       shell: true,
     }
   );
-  const { stdout: repoUrl } = await command(
+  const { stdout: repoUrl } = await execaCommand(
     `pulumi stack --stack dev output repoUrls | jq -r '."${appName}"'`,
     {
       cwd: '../infra/resources',
@@ -57,7 +57,7 @@ process.chdir(__dirname);
       stdio: 'inherit',
     }
   );
-  await command('pulumi up --stack dev --yes', {
+  await execaCommand('pulumi up --stack dev --yes', {
     cwd: `../infra/deploy/${appName}`,
     stdio: 'inherit',
     env: {

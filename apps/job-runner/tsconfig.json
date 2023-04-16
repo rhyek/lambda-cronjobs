@@ -1,15 +1,9 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "commonjs",
+    "rootDir": "../../",
     "outDir": "./dist",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "useUnknownInCatchVariables": false,
-    "sourceMap": true,
-    "inlineSources": true
+    "lib": ["DOM"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "../../shared/**/*.ts"]
 }

@@ -1,3 +1,3 @@
-export abstract class Job {
-  abstract run(): Promise<void>;
+export abstract class Job<D = any> {
+  abstract run(data?: D): Promise<void>;
 }

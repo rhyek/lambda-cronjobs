@@ -1,9 +1,9 @@
 import { Browser, Page } from 'playwright';
 import { isEqual } from 'lodash';
-import { PlaywrightJob } from './_playwright-job';
-import { getJobRunnerSecrets } from '../secrets';
-import { isLambda } from '../utils';
-import { mailToMe } from '../mailer';
+import { PlaywrightJob } from './_playwright-job.js';
+import { getJobRunnerSecrets } from '../secrets.js';
+import { isLambda } from '../utils.js';
+import { mailToMe } from '../mailer.js';
 
 export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJob {
   protected override async playwrightRun({

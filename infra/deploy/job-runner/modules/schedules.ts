@@ -1,20 +1,15 @@
 import * as aws from '@pulumi/aws';
-import { JobName, truncatePulumiResourceName } from '../../../../shared';
-import { JobRunnerMessagePayload } from '../../../../shared/sqs-message-payloads';
-import { resourceName } from './resource-name';
-import { queue } from './sqs';
+import {
+  JobName,
+  truncatePulumiResourceName,
+} from '../../../../shared/index.js';
+import { JobRunnerMessagePayload } from '../../../../shared/sqs-message-payloads.js';
+import { resourceName } from './resource-name.js';
+import { queue } from './sqs.js';
+import { checkMexicanEmbassyVisaAppointmentAvailability } from '../check-mexican-embassy-visa-appointment-availability/index.js';
 
 const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
-  {
-    jobName: JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY,
-    scheduleExpression:
-      'cron(0 1,13,16,19,22 ? * * *)' /* every 3 hours during the day */,
-  },
-  // {
-  //   jobName: JobName.GOOGLE_TITLE,
-  //   // scheduleExpression: 'cron(0/10 * ? * * *)' /* every 10 minutes */,
-  //   scheduleExpression: 'cron(* * ? * * *)' /* every minute */,
-  // },
+  ...checkMexicanEmbassyVisaAppointmentAvailability.jobSchedules,
 ];
 
 for (const { jobName, scheduleExpression } of jobSchedules) {

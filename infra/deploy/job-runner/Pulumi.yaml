@@ -1,3 +1,6 @@
 name: lambda-cronjobs.deploy-job-runner
-runtime: nodejs
 description: A minimal AWS TypeScript Pulumi program
+runtime:
+  name: nodejs
+  options:
+    nodeargs: '--loader tsx --no-warnings'

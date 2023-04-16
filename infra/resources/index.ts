@@ -1,6 +1,6 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
-import { MailerConfig } from '../../shared';
+import { MailerConfig } from '../../shared/index.js';
 
 const config = new pulumi.Config();
 
