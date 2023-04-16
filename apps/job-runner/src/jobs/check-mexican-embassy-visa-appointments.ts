@@ -1,6 +1,6 @@
 import { Browser, Page } from 'playwright';
 import { isEqual } from 'lodash';
-import { PlaywrightJob } from './_playwright-job.js';
+import { PlaywrightJob } from '../playwright-job.js';
 import { getJobRunnerSecrets } from '../secrets.js';
 import { isLambda } from '../utils.js';
 import { mailToMe } from '../mailer.js';

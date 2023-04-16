@@ -8,9 +8,9 @@ import {
 } from 'playwright';
 import { launchChromium } from 'playwright-aws-lambda';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { Job } from './_job.js';
-import { isLambda } from '../utils.js';
-import { JobError } from '../job-error.js';
+import { Job } from './job.js';
+import { isLambda } from './utils.js';
+import { JobError } from './job-error.js';
 
 export abstract class PlaywrightJob<D = any> extends Job<D> {
   override async run(): Promise<void> {

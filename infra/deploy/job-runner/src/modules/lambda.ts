@@ -1,9 +1,9 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
-import { secrets } from '../modules/secrets.js';
-import { resourceName } from '../modules/resource-name.js';
-import { lambdaRole } from '../modules/lambda-role.js';
-import { queue } from '../modules/sqs.js';
+import { secrets } from './secrets.js';
+import { resourceName } from '../resource-name.js';
+import { lambdaRole } from './lambda-role.js';
+import { queue } from './sqs.js';
 import { playwrightTracessS3Bucket } from './s3.js';
 
 const imageUri = process.env.IMAGE_URI!;

@@ -11,7 +11,9 @@ const mailerConfigSecretArn = resourcesStack.getOutput(
 
 export const secrets = {
   mailerConfig: mailerConfigSecretArn,
-  ...(await import(
-    '../check-mexican-embassy-visa-appointment-availability/index.js'
-  ).then((m) => m.checkMexicanEmbassyVisaAppointmentAvailability.secrets)),
+  ...(
+    await import(
+      '../jobs/check-mexican-embassy-visa-appointment-availability/secrets.js'
+    )
+  ).default,
 };

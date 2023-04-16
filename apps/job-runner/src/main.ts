@@ -6,7 +6,7 @@ import { JobRunnerMessagePayload } from '../../../shared/sqs-message-payloads.js
 import { JobError } from './job-error.js';
 import { CheckMexicanEmbassyVisaAppointmentAvailability } from './jobs/check-mexican-embassy-visa-appointments.js';
 import { GoogleTitleJob } from './jobs/google-title-job.js';
-import { Job } from './jobs/_job.js';
+import { Job } from './job.js';
 import { mailToMe } from './mailer.js';
 
 export const jobs: { [x in JobName]?: Job } = {

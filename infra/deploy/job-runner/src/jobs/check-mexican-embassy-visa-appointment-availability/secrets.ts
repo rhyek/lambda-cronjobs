@@ -1,7 +1,7 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
-import { truncatePulumiResourceName } from '../../../../shared/pulumi-helpers.js';
-import { JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig } from '../../../../shared/types/job-check-mexican-embassy-visa-appointment-availability-config.js';
+import { truncatePulumiResourceName } from '../../../../../../shared/pulumi-helpers.js';
+import { JobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig } from '../../../../../../shared/types/job-check-mexican-embassy-visa-appointment-availability-config.js';
 
 const config = new pulumi.Config();
 
@@ -32,7 +32,7 @@ new aws.secretsmanager.SecretVersion(
   }
 );
 
-export const secrets = {
+export default {
   jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfig:
     jobCheckMexicanEmbassyVisaAppointmentAvailabilityConfigSecret.arn,
 };

@@ -1,5 +1,5 @@
 import * as aws from '@pulumi/aws';
-import { resourceName } from './resource-name.js';
+import { resourceName } from '../resource-name.js';
 import { playwrightTracesS3BucketLambdaPutObjectPolicy } from './s3.js';
 import { secrets } from './secrets.js';
 
