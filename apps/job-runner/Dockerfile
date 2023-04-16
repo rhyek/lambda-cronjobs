@@ -1,5 +1,5 @@
 # https://mcr.microsoft.com/en-us/product/playwright/tags
-FROM mcr.microsoft.com/playwright:v1.30.0-focal
+FROM mcr.microsoft.com/playwright:v1.32.3-focal
 
 RUN apt-get update && \
   apt-get install -y \
