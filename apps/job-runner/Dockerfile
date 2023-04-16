@@ -42,4 +42,4 @@ RUN pnpm build
 
 WORKDIR ${FUNCTION_DIR}/apps
 ENTRYPOINT ["/usr/bin/npx", "aws-lambda-ric"]
-CMD ["../main.handler"]
+CMD ["./main.handler"]
