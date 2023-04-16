@@ -20,8 +20,8 @@ dependencies:
     specifier: 1.32.3
     version: 1.32.3
   playwright-aws-lambda:
-    specifier: ~0.9.0
-    version: 0.9.0(playwright-core@1.32.3)
+    specifier: 0.10.0
+    version: 0.10.0(playwright-core@1.32.3)
   source-map-support:
     specifier: ~0.5.21
     version: 0.5.21
@@ -1595,8 +1595,8 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: false
 
-  /playwright-aws-lambda@0.9.0(playwright-core@1.32.3):
-    resolution: {integrity: sha512-MnzLTZ4B9I4JdWJ+eq7BbrhFjL6VyT0bF+ccNjBCwjwlBNQaTEXOcrkAe+p8YkOXnYUqBbsrZj5Ene8PqKosiw==}
+  /playwright-aws-lambda@0.10.0(playwright-core@1.32.3):
+    resolution: {integrity: sha512-osGbx0Nwco6E9JZK/2Uq3lrQ5rmjLEQ9Iw0286wQZ93s+8Ok8IwOmzP765JGTRDvjd/5woE5qwICnhw9iPisOQ==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
       playwright-core: ^1
