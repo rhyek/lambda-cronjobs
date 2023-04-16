@@ -35,6 +35,7 @@ COPY \
   ./
 RUN pnpm i --frozen-lockfile
 COPY shared ${FUNCTION_DIR}/shared
+COPY tsconfig.json ${FUNCTION_DIR}/
 COPY apps/job-runner/tsconfig.json ./
 COPY apps/job-runner/src src
 RUN pnpm build
