@@ -2,7 +2,7 @@
   "name": "job-runner",
   "type": "module",
   "scripts": {
-    "dev": "ts-node-dev --respawn --inspect -- src/dev.ts",
+    "dev": "tsx watch src/dev.ts",
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
@@ -13,8 +13,7 @@
     "nodemailer": "~6.9.1",
     "playwright": "~1.30.0",
     "playwright-aws-lambda": "~0.9.0",
-    "source-map-support": "~0.5.21",
-    "tsx": "~3.12.6"
+    "source-map-support": "~0.5.21"
   },
   "devDependencies": {
     "@types/aws-lambda": "~8.10.110",
@@ -23,7 +22,7 @@
     "@types/nodemailer": "~6.4.7",
     "@types/source-map-support": "~0.5.6",
     "minimist": "~1.2.7",
-    "ts-node-dev": "~2.0.0",
+    "tsx": "~3.12.6",
     "typescript": "~4.9.4"
   }
 }
