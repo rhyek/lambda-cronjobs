@@ -5,7 +5,12 @@ import { execa, execaCommand } from 'execa';
 
 const {
   _: [appName],
-} = parseArgs(process.argv.slice(2));
+  load,
+} = parseArgs<{ load?: boolean }>(process.argv.slice(2));
+
+if (load) {
+  console.log('Loading image into local docker. Will not push to ECR.');
+}
 
 const __dirname = dirname(import.meta.url);
 
@@ -61,7 +66,7 @@ await execa(
           `type=gha,scope=${appName},mode=max,url=${process.env.ACTIONS_CACHE_URL},token=${process.env.ACTIONS_RUNTIME_TOKEN}`,
         ]
       : []),
-    '--push',
+    load ? '--load' : '--push',
     '.',
   ],
   {
@@ -70,11 +75,13 @@ await execa(
   }
 );
 
-await execaCommand('pulumi up --stack dev --yes', {
-  cwd: `../infra/deploy/${appName}`,
-  stdio: 'inherit',
-  env: {
-    IMAGE_URI: imageUri,
-    ARCH: arch,
-  },
-});
+if (!load) {
+  await execaCommand('pulumi up --stack dev --yes', {
+    cwd: `../infra/deploy/${appName}`,
+    stdio: 'inherit',
+    env: {
+      IMAGE_URI: imageUri,
+      ARCH: arch,
+    },
+  });
+}
