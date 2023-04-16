@@ -14,9 +14,8 @@ RUN apt-get update && \
 
 ARG FUNCTION_DIR="/function"
 RUN mkdir -p ${FUNCTION_DIR}
-WORKDIR ${FUNCTION_DIR}
-WORKDIR ${FUNCTION_DIR}/apps/job-runner
-
+WORKDIR ${FUNCTION_DIR}/apps
+COPY apps/job-runner/main.js ./
 RUN npm i aws-lambda-ric
 
 # at runtime something related to npm
@@ -29,6 +28,7 @@ RUN npm config --global set cache /tmp/.npm-cache
 ENV PATH="$PATH:/tmp/.npm/bin"
 RUN npm i -g pnpm
 
+WORKDIR ${FUNCTION_DIR}/apps/job-runner
 COPY \
   apps/job-runner/package.json \
   apps/job-runner/pnpm-lock.yaml \
@@ -39,8 +39,7 @@ COPY tsconfig.json ${FUNCTION_DIR}/
 COPY apps/job-runner/tsconfig.json ./
 COPY apps/job-runner/src src
 RUN pnpm build
-COPY apps/job-runner/main.js ../
 
-# WORKDIR ${FUNCTION_DIR}/apps
+WORKDIR ${FUNCTION_DIR}/apps
 ENTRYPOINT ["/usr/bin/npx", "aws-lambda-ric"]
 CMD ["../main.handler"]
