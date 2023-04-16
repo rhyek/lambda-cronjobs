@@ -41,6 +41,6 @@ COPY apps/job-runner/src src
 RUN pnpm build
 COPY apps/job-runner/main.js ../
 
-WORKDIR ${FUNCTION_DIR}/apps
-# ENTRYPOINT ["/usr/bin/npx", "aws-lambda-ric"]
+# WORKDIR ${FUNCTION_DIR}/apps
+ENTRYPOINT ["/usr/bin/npx", "aws-lambda-ric"]
 CMD ["../main.handler"]
