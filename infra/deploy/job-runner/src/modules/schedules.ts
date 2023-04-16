@@ -19,7 +19,7 @@ const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
 
 for (const { jobName, scheduleExpression } of jobSchedules) {
   const handler = new aws.lambda.CallbackFunction(
-    `${resourceName}_message_${jobName}`,
+    truncatePulumiResourceName(`${resourceName}_message_${jobName}`),
     {
       runtime: 'nodejs18.x',
       callback: async () => {
