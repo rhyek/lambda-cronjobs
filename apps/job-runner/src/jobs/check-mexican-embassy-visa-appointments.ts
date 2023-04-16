@@ -1,5 +1,5 @@
-import { Browser, Page } from 'playwright';
-import { isEqual } from 'lodash';
+import { Page } from 'playwright';
+import { isEqual } from 'lodash-es';
 import { PlaywrightJob } from '../playwright-job.js';
 import { getJobRunnerSecrets } from '../secrets.js';
 import { isLambda } from '../utils.js';

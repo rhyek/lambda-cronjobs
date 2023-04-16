@@ -1,4 +1,4 @@
-import 'source-map-support/register';
+import './bootstrap.js';
 import type { Handler, SQSEvent } from 'aws-lambda';
 import dayjs from 'dayjs';
 import { JobName } from '../../../shared/job-names.js';

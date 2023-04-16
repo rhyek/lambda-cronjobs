@@ -39,6 +39,7 @@ COPY tsconfig.json ${FUNCTION_DIR}/
 COPY apps/job-runner/tsconfig.json ./
 COPY apps/job-runner/src src
 RUN pnpm build
+COPY apps/job-runner/main.js ${FUNCTION_DIR}/apps/
 
 ENTRYPOINT ["/usr/bin/npx", "aws-lambda-ric"]
-CMD ["./dist/apps/job-runner/src/main.handler"]
+CMD ["${FUNCTION_DIR}/apps/main.handler"]

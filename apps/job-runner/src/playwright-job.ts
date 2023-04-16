@@ -18,9 +18,9 @@ export abstract class PlaywrightJob<D = any> extends Job<D> {
     let context: BrowserContext | null = null;
     try {
       browser = isLambda()
-        ? await launchChromium({
+        ? ((await launchChromium({
             headless: true,
-          })
+          })) as Browser)
         : await chromium.launch({
             headless: false,
           });
