@@ -38,6 +38,7 @@ const { stdout: repoUrl } = await execaCommand(
 const imageUri = `${repoUrl}:${tag}`;
 const platform = process.env.CI ? 'linux/amd64' : 'linux/arm64';
 const arch = process.env.CI ? 'x86_64' : 'arm64';
+
 console.log('params', JSON.stringify({ imageUri, platform, arch }, null, 2));
 
 await execa(
@@ -60,7 +61,7 @@ await execa(
           `type=gha,scope=${appName},mode=max,url=${process.env.ACTIONS_CACHE_URL},token=${process.env.ACTIONS_RUNTIME_TOKEN}`,
         ]
       : []),
-    '--load',
+    '--push',
     '.',
   ],
   {
@@ -69,11 +70,11 @@ await execa(
   }
 );
 
-// await execaCommand('pulumi up --stack dev --yes', {
-//   cwd: `../infra/deploy/${appName}`,
-//   stdio: 'inherit',
-//   env: {
-//     IMAGE_URI: imageUri,
-//     ARCH: arch,
-//   },
-// });
+await execaCommand('pulumi up --stack dev --yes', {
+  cwd: `../infra/deploy/${appName}`,
+  stdio: 'inherit',
+  env: {
+    IMAGE_URI: imageUri,
+    ARCH: arch,
+  },
+});
