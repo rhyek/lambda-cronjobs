@@ -6,9 +6,7 @@ export async function call(params: { to: string; twiml: string }) {
   let authToken: string;
   let fromNumber: string;
   if (isLambda()) {
-    ({
-      twilioConfig: { accountSid, authToken, fromNumber },
-    } = JSON.parse(process.env.TWILIO!));
+    ({ accountSid, authToken, fromNumber } = JSON.parse(process.env.TWILIO!));
   } else {
     accountSid = process.env.TWILIO_ACCOUNT_SID!;
     authToken = process.env.TWILIO_AUTH_TOKEN!;
@@ -25,9 +23,7 @@ export async function call(params: { to: string; twiml: string }) {
 export async function callMe(params: { twiml: string }) {
   let myNumber: string;
   if (isLambda()) {
-    ({
-      twilioConfig: { myNumber },
-    } = JSON.parse(process.env.TWILIO!));
+    ({ myNumber } = JSON.parse(process.env.TWILIO!));
   } else {
     myNumber = process.env.TWILIO_MY_NUMBER!;
   }
