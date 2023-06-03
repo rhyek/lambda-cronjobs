@@ -8,12 +8,16 @@ import {
 } from 'playwright';
 import { launchChromium } from 'playwright-aws-lambda';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { Job } from './job.js';
+import { Job, RunParams } from './job.js';
 import { isLambda } from './utils.js';
 import { JobError } from './job-error.js';
 
+export type PlaywrightRunParams<D> = RunParams<D> & {
+  page: Page;
+};
+
 export abstract class PlaywrightJob<D = any> extends Job<D> {
-  override async run(): Promise<void> {
+  override async run(params: RunParams<D>): Promise<void> {
     let browser: Browser | null = null;
     let context: BrowserContext | null = null;
     try {
@@ -36,7 +40,7 @@ export abstract class PlaywrightJob<D = any> extends Job<D> {
         });
       }
       const page = await context.newPage();
-      await this.playwrightRun({ page });
+      await this.playwrightRun({ page, ...params });
     } catch (error) {
       if (
         error instanceof playwrightErrors.TimeoutError &&
@@ -81,5 +85,7 @@ View trace: ${viewTraceUrl}\
     }
   }
 
-  protected abstract playwrightRun({ page }: { page: Page }): Promise<void>;
+  protected abstract playwrightRun(
+    params: PlaywrightRunParams<D>
+  ): Promise<void>;
 }

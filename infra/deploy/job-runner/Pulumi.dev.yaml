@@ -7,3 +7,20 @@ config:
           secure: AAABAOHq1N2ikUFHwt85+gStrCjNbJgELMQGbBtprDN/Q4TIJ559C2xuHrnWwGyUOFuYvwwt
         password:
           secure: AAABAGCrpzv+yXcrj2ywjgWGlrLINjnAa93Q1d6PZ01sfbXMkpbjYlrj8uK0ZKuWITWlcw==
+  lambda-cronjobs.deploy-job-runner:mailer:
+    me:
+      secure: AAABAFHu2n5Dtedd28m3fUjglbtGFtRS72YqOzcWlDkb58OA2WXDvF7rTKuSvhcotOYwyAmbF8OVpTwN7y9oLoH/HDRvVaE2jg==
+    smtp:
+      account:
+        secure: AAABAB7SPEIgF8C3Jm5wknavPin+PEYk3qGcSCOGnsIrABHC/wvm5oxN0wRm5G7F96wY5A==
+      password:
+        secure: AAABALKbCrFP/xM+XUe2054nISxlrXDp17ngpJyJgzhF3oIeaYtVaWhr/nvGxyX7
+  lambda-cronjobs.deploy-job-runner:twilio:
+    accountSid:
+      secure: AAABADsyr3q9gRYPCHs2VD9GGrPdt4xV380GjTtDXK0LNnbgBtrFpKNbMkTJL19RFWrvWGsNWXzkltYhv+UslRdi
+    authToken:
+      secure: AAABAFabluFVMu6SUW9CydZZvBUi5h9d9X4Ij6a6JHZ09j7P+5LyP56ciQd53o0eukew8OWpucLnPkobQXjVGQ==
+    fromNumber:
+      secure: AAABAH1o7z6/4kC8yVHaT826zqDArBomz4vJeXXIBMBqf9rpyQDxTZfYUvY=
+    myNumber:
+      secure: AAABAOmgGc4JQzfLUrF191Wgj3RUzfDOZmbTIyXxvx1aqxQ6DYnIWbz+5MM=

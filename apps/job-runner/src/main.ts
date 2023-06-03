@@ -3,9 +3,10 @@ import type { Handler, SQSEvent } from 'aws-lambda';
 import dayjs from 'dayjs';
 import { JobError } from './job-error.js';
 import { Job } from './job.js';
-import { mailToMe } from './mailer.js';
+import { mailToMe } from './services/mailer.js';
 import { JobName, jobs } from './jobs/index.js';
 import { JobRunnerMessagePayload } from '../../../shared/types/job-runner-message-payload.js';
+import { callMe } from './services/caller.js';
 
 export async function runJob(jobName: JobName, data?: any) {
   const job = jobs[jobName];
@@ -17,7 +18,7 @@ export async function runJob(jobName: JobName, data?: any) {
   const start = dayjs();
   console.log(`Starting job ${jobClassName}`);
   try {
-    await (job as Job).run(data);
+    await (job as Job).run({ data, callMe });
     console.log('Finished successfully');
   } catch (_error) {
     const error: Error = _error.cause ?? _error;

@@ -1,7 +1,7 @@
 // https://www.pulumi.com/blog/safe-lambda-secrets/
 import { createTransport, Transporter } from 'nodemailer';
-import { isLambda } from './utils.js';
-import { getJobRunnerSecrets } from './secrets.js';
+import { isLambda } from '../utils.js';
+import { MailerConfig } from '../../../../shared/index.js';
 
 let transport: Transporter | null = null;
 
@@ -11,10 +11,8 @@ export async function getMailer(): Promise<Transporter> {
     let password: string;
     if (isLambda()) {
       ({
-        mailerConfig: {
-          smtp: { account, password },
-        },
-      } = await getJobRunnerSecrets());
+        smtp: { account, password },
+      } = JSON.parse(process.env.MAILER!) as MailerConfig);
     } else {
       account = process.env.MAILER_SMTP_ACCOUNT!;
       password = process.env.MAILER_SMTP_PASSWORD!;
@@ -40,9 +38,7 @@ export async function mailToMe({
   const mailer = await getMailer();
   await mailer.sendMail({
     to: isLambda()
-      ? (
-          await getJobRunnerSecrets()
-        ).mailerConfig.me
+      ? (JSON.parse(process.env.MAILER!) as MailerConfig).me
       : process.env.MAILER_ME!,
     subject,
     text,

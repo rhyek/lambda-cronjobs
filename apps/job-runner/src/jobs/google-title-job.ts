@@ -1,5 +1,5 @@
 import { Page } from 'playwright';
-import { mailToMe } from '../mailer.js';
+import { mailToMe } from '../services/mailer.js';
 import { isLambda } from '../utils.js';
 import { PlaywrightJob } from '../playwright-job.js';
 
