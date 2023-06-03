@@ -1,28 +1,17 @@
 import * as aws from '@pulumi/aws';
-import {
-  JobName,
-  truncatePulumiResourceName,
-} from '../../../../../shared/index.js';
+import { truncatePulumiResourceName } from '../../../../../shared/index.js';
 import { JobRunnerMessagePayload } from '../../../../../shared/sqs-message-payloads.js';
 import { resourceName } from '../resource-name.js';
 import { queue } from './sqs.js';
+import { jobs } from '../../../../../apps/job-runner/src/jobs/index.js';
 
-const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
-  // ...(
-  //   await import(
-  //     '../jobs/check-mexican-embassy-visa-appointment-availability/schedules.js'
-  //   )
-  // ).default,
-  ...(
-    await import(
-      '../jobs/check-roger-waters-ticket-sales-readiness/schedules.js'
-    )
-  ).default,
-];
+const enabledJobs = Object.entries(jobs).filter(
+  ([, job]) => job.enabled && job.scheduleCronExpression
+);
 
 // https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/javascriptv3/example_code/sqs/src/sqs_sendmessage.js
 
-for (const { jobName, scheduleExpression } of jobSchedules) {
+for (const [jobName, job] of enabledJobs) {
   const handler = new aws.lambda.CallbackFunction(
     truncatePulumiResourceName(`${resourceName}_message_${jobName}`),
     {
@@ -51,7 +40,7 @@ for (const { jobName, scheduleExpression } of jobSchedules) {
   );
   aws.cloudwatch.onSchedule(
     truncatePulumiResourceName(`${resourceName}_schedule_${jobName}`),
-    scheduleExpression,
+    job.scheduleCronExpression,
     handler
   );
 }

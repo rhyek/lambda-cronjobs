@@ -3,6 +3,9 @@ import { PlaywrightJob } from '../playwright-job.js';
 import { mailToMe } from '../mailer.js';
 
 export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
+  public enabled: boolean = true;
+  public scheduleCronExpression: string = 'cron(0/60 * ? * * *)';
+
   protected async playwrightRun({ page }: { page: Page }): Promise<void> {
     await page.goto('https://www.eticket.cr/masinformacion.aspx?idevento=8146');
     const isVisible = await page

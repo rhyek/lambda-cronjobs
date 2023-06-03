@@ -1,22 +1,11 @@
 import './bootstrap.js';
 import type { Handler, SQSEvent } from 'aws-lambda';
 import dayjs from 'dayjs';
-import { JobName } from '../../../shared/job-names.js';
 import { JobRunnerMessagePayload } from '../../../shared/sqs-message-payloads.js';
 import { JobError } from './job-error.js';
-import { CheckMexicanEmbassyVisaAppointmentAvailability } from './jobs/check-mexican-embassy-visa-appointments.js';
-import { GoogleTitleJob } from './jobs/google-title-job.js';
 import { Job } from './job.js';
 import { mailToMe } from './mailer.js';
-import { CheckRogerWatersTicketSalesReadiness } from './jobs/check-roger-waters-ticket-stales-readiness.js';
-
-export const jobs: { [x in JobName]?: Job } = {
-  [JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY]:
-    new CheckMexicanEmbassyVisaAppointmentAvailability(),
-  [JobName.GOOGLE_TITLE]: new GoogleTitleJob(),
-  [JobName.CHECK_ROGER_WATERS_TICKET_SALES_READINESS]:
-    new CheckRogerWatersTicketSalesReadiness(),
-};
+import { JobName, jobs } from './jobs/index.js';
 
 export async function runJob(jobName: JobName, data?: any) {
   const job = jobs[jobName];
@@ -28,7 +17,7 @@ export async function runJob(jobName: JobName, data?: any) {
   const start = dayjs();
   console.log(`Starting job ${jobClassName}`);
   try {
-    await job.run(data);
+    await (job as Job).run(data);
     console.log('Finished successfully');
   } catch (_error) {
     const error: Error = _error.cause ?? _error;

@@ -6,6 +6,9 @@ import { isLambda } from '../utils.js';
 import { mailToMe } from '../mailer.js';
 
 export class CheckMexicanEmbassyVisaAppointmentAvailability extends PlaywrightJob {
+  public enabled: boolean = false;
+  public scheduleCronExpression: string = 'cron(0 1,13,16,19,22 ? * * *)';
+
   protected override async playwrightRun({
     page,
   }: {

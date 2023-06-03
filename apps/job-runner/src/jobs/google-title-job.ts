@@ -4,6 +4,8 @@ import { isLambda } from '../utils.js';
 import { PlaywrightJob } from '../playwright-job.js';
 
 export class GoogleTitleJob extends PlaywrightJob {
+  public enabled: boolean;
+  public scheduleCronExpression: string;
   protected override async playwrightRun({
     page,
   }: {
