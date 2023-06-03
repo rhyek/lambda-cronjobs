@@ -3,7 +3,8 @@ import { PlaywrightJob, PlaywrightRunParams } from '../playwright-job.js';
 export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
   public enabled: boolean = true;
   // public scheduleCronExpression: string = 'cron(41 * ? * * *)';
-  public scheduleCronExpression: string = 'cron(0 * ? * * *)';
+  // public scheduleCronExpression: string = 'cron(0 * ? * * *)';
+  public scheduleCronExpression: string = 'cron(0/20 * * * ? *)'; // every 20 minutes
 
   protected async playwrightRun({
     page,
@@ -21,12 +22,17 @@ export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
 
     console.log('isVisible', isVisible);
 
-    await mailMe({
-      subject: `Roger Waters CR ticket sales ${
-        isVisible ? 'are NOT' : 'ARE'
-      } available`,
-      text: 'see title',
-    });
+    const sendEmail =
+      !isVisible ||
+      (new Date().getMinutes() >= 58 && new Date().getMinutes() <= 2);
+    if (sendEmail) {
+      await mailMe({
+        subject: `Roger Waters CR ticket sales ${
+          isVisible ? 'are NOT' : 'ARE'
+        } available`,
+        text: 'see title',
+      });
+    }
     if (!isVisible) {
       await callMe({
         twiml:
