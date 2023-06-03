@@ -1,11 +1,15 @@
 import './bootstrap.js';
 import type { Handler, SQSEvent } from 'aws-lambda';
 import dayjs from 'dayjs';
-import { JobRunnerMessagePayload } from '../../../shared/sqs-message-payloads.js';
 import { JobError } from './job-error.js';
 import { Job } from './job.js';
 import { mailToMe } from './mailer.js';
 import { JobName, jobs } from './jobs/index.js';
+
+export type JobRunnerMessagePayload = {
+  job: JobName;
+  data: any;
+};
 
 export async function runJob(jobName: JobName, data?: any) {
   const job = jobs[jobName];
