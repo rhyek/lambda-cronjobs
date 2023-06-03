@@ -24,7 +24,8 @@ export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
 
     const sendEmail =
       !isVisible ||
-      (new Date().getMinutes() >= 58 && new Date().getMinutes() <= 2);
+      new Date().getMinutes() >= 58 ||
+      new Date().getMinutes() <= 2;
     if (sendEmail) {
       await mailMe({
         subject: `Roger Waters CR ticket sales ${
