@@ -8,11 +8,14 @@ import { CheckMexicanEmbassyVisaAppointmentAvailability } from './jobs/check-mex
 import { GoogleTitleJob } from './jobs/google-title-job.js';
 import { Job } from './job.js';
 import { mailToMe } from './mailer.js';
+import { CheckRogerWatersTicketSalesReadiness } from './jobs/check-roger-waters-ticket-stales-readiness.js';
 
 export const jobs: { [x in JobName]?: Job } = {
   [JobName.CHECK_MEXICAN_EMBASSY_VISA_APPOINTMENT_AVAILABILITY]:
     new CheckMexicanEmbassyVisaAppointmentAvailability(),
   [JobName.GOOGLE_TITLE]: new GoogleTitleJob(),
+  [JobName.CHECK_ROGER_WATERS_TICKET_SALES_READINESS]:
+    new CheckRogerWatersTicketSalesReadiness(),
 };
 
 export async function runJob(jobName: JobName, data?: any) {

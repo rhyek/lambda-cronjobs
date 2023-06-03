@@ -1,5 +1,4 @@
 import * as pulumi from '@pulumi/pulumi';
-import { Output } from '@pulumi/pulumi';
 
 const resourcesStack = new pulumi.StackReference(
   `rhyek/lambda-cronjobs.resources/${pulumi.getStack()}`
@@ -7,7 +6,7 @@ const resourcesStack = new pulumi.StackReference(
 
 const mailerConfigSecretArn = resourcesStack.getOutput(
   'mailerConfigSecretArn'
-) as Output<string>;
+) as pulumi.Output<string>;
 
 export const secrets = {
   mailerConfig: mailerConfigSecretArn,

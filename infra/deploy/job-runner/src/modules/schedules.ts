@@ -8,9 +8,14 @@ import { resourceName } from '../resource-name.js';
 import { queue } from './sqs.js';
 
 const jobSchedules: { jobName: JobName; scheduleExpression: string }[] = [
+  // ...(
+  //   await import(
+  //     '../jobs/check-mexican-embassy-visa-appointment-availability/schedules.js'
+  //   )
+  // ).default,
   ...(
     await import(
-      '../jobs/check-mexican-embassy-visa-appointment-availability/schedules.js'
+      '../jobs/check-roger-waters-ticket-sales-readiness/schedules.js'
     )
   ).default,
 ];
