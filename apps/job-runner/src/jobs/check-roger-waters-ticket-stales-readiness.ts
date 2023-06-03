@@ -2,8 +2,8 @@ import { PlaywrightJob, PlaywrightRunParams } from '../playwright-job.js';
 
 export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
   public enabled: boolean = true;
-  // cron expression 10 minutes after every hour
-  public scheduleCronExpression: string = '10 * * * *';
+  // public scheduleCronExpression: string = 'cron(0/60 * ? * * *)';
+  public scheduleCronExpression: string = 'cron(0 17 * * * * )';
 
   protected async playwrightRun({
     page,
@@ -27,9 +27,11 @@ export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
       } available`,
       text: 'see title',
     });
-    await callMe({
-      twiml:
-        '<Response><Say>Concert tickets for Roger Waters are available!</Say></Response>',
-    });
+    if (!isVisible) {
+      await callMe({
+        twiml:
+          '<Response><Say>Concert tickets for Roger Waters are available!</Say></Response>',
+      });
+    }
   }
 }

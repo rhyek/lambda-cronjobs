@@ -95,6 +95,7 @@ jobs:
           pnpm \
             --filter {scripts} \
             --filter {infra/deploy/${{ matrix.appName }}} \
+            --filter {apps/job-runner} \
             install --frozen-lockfile
 
       - uses: docker/setup-buildx-action@v2
