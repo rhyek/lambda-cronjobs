@@ -3,7 +3,7 @@ import { truncatePulumiResourceName } from '../../../../../shared/index.js';
 import { resourceName } from '../resource-name.js';
 import { queue } from './sqs.js';
 import { jobs } from '../../../../../apps/job-runner/src/jobs/index.js';
-import { JobRunnerMessagePayload } from '../../../../../apps/job-runner/src/main.js';
+import { JobRunnerMessagePayload } from '../../../../../shared/types/job-runner-message-payload.js';
 
 const enabledJobs = Object.entries(jobs).filter(
   ([, job]) => job.enabled && job.scheduleCronExpression

@@ -5,11 +5,7 @@ import { JobError } from './job-error.js';
 import { Job } from './job.js';
 import { mailToMe } from './mailer.js';
 import { JobName, jobs } from './jobs/index.js';
-
-export type JobRunnerMessagePayload = {
-  job: JobName;
-  data: any;
-};
+import { JobRunnerMessagePayload } from '../../../shared/types/job-runner-message-payload.js';
 
 export async function runJob(jobName: JobName, data?: any) {
   const job = jobs[jobName];
@@ -53,6 +49,6 @@ export const handler: Handler<SQSEvent> = async (event) => {
   for (const record of event.Records) {
     const { body } = record;
     const { job: jobName, data } = JSON.parse(body) as JobRunnerMessagePayload;
-    await runJob(jobName, data);
+    await runJob(jobName as JobName, data);
   }
 };
