@@ -1,5 +1,5 @@
 import { Page } from 'playwright';
-import { mailToMe } from '../services/mailer.js';
+import { mailMe } from '../services/mailer.js';
 import { isLambda } from '../utils.js';
 import { PlaywrightJob } from '../playwright-job.js';
 
@@ -26,7 +26,7 @@ export class GoogleTitleJob extends PlaywrightJob {
     }
     const title = await page.title();
     console.log('title:', title);
-    await mailToMe({
+    await mailMe({
       subject: 'google title result',
       text: `title: ${title}`,
     });

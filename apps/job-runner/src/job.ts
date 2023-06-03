@@ -13,5 +13,6 @@ export type RunParams<D> = {
 } & Services;
 
 type Services = {
+  mailMe: (params: { subject: string; text: string }) => Promise<void>;
   callMe: (params: { twiml: string }) => Promise<void>;
 };

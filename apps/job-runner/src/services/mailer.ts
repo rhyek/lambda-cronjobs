@@ -28,7 +28,7 @@ export async function getMailer(): Promise<Transporter> {
   return transport;
 }
 
-export async function mailToMe({
+export async function mailMe({
   subject,
   text,
 }: {
