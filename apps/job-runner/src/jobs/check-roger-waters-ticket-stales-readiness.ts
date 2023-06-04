@@ -4,7 +4,7 @@ export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
   public enabled: boolean = true;
   // public scheduleCronExpression: string = 'cron(41 * ? * * *)';
   // public scheduleCronExpression: string = 'cron(0 * ? * * *)';
-  public scheduleCronExpression: string = 'cron(0/20 * * * ? *)'; // every 20 minutes
+  public scheduleCronExpression: string = 'cron(0/10 * * * ? *)'; // every 10 minutes
 
   protected async playwrightRun({
     page,
