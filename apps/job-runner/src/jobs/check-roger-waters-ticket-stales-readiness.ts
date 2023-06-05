@@ -31,7 +31,7 @@ export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
         subject: `Roger Waters CR ticket sales ${
           isVisible ? 'are NOT' : 'ARE'
         } available`,
-        text: 'see title',
+        text: 'go to https://www.eticket.cr/masinformacion.aspx?idevento=8146',
       });
     }
     if (!isVisible) {
