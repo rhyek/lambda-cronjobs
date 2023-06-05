@@ -1,7 +1,7 @@
 import { PlaywrightJob, PlaywrightRunParams } from '../playwright-job.js';
 
 export class CheckRogerWatersTicketSalesReadiness extends PlaywrightJob {
-  public enabled: boolean = true;
+  public enabled: boolean = false;
   // public scheduleCronExpression: string = 'cron(41 * ? * * *)';
   // public scheduleCronExpression: string = 'cron(0 * ? * * *)';
   public scheduleCronExpression: string = 'cron(0/10 * * * ? *)'; // every 10 minutes
